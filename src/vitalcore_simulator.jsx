@@ -133,7 +133,7 @@ function ExecutiveSummary() {
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:24 }}>
           <div>
             <div style={{ color:"rgba(255,255,255,0.5)", fontSize:10, textTransform:"uppercase", letterSpacing:2, marginBottom:8 }}>Purpose</div>
-            <div style={{ color:C.white, fontSize:13, lineHeight:1.6 }}>
+            <div style={{ color:C.white, fontSize:15, lineHeight:1.7 }}>
               Modernize VitalCore's aging on-premise infrastructure across 8 hospitals by migrating to AWS —
               enabling real-time patient analytics, HIPAA compliance automation, and enterprise-grade uptime for critical clinical systems.
             </div>
@@ -141,7 +141,7 @@ function ExecutiveSummary() {
           <div>
             <div style={{ color:"rgba(255,255,255,0.5)", fontSize:10, textTransform:"uppercase", letterSpacing:2, marginBottom:8 }}>Stakeholders</div>
             {["CIO — Migration sponsor & architecture","CFO — Budget & ROI oversight","Compliance Officer — HIPAA & SOC 2","Data Scientists — Analytics platform","Operations Team — Uptime & SLAs","Clinical Staff — End-user adoption"].map((s, i) => (
-              <div key={i} style={{ color:C.white, fontSize:12, marginBottom:5, display:"flex", gap:8, alignItems:"center" }}>
+              <div key={i} style={{ color:C.white, fontSize:14, marginBottom:6, display:"flex", gap:8, alignItems:"center" }}>
                 <div style={{ width:5, height:5, borderRadius:"50%", background:"#60A5FA", flexShrink:0 }} />
                 {s}
               </div>
@@ -151,8 +151,8 @@ function ExecutiveSummary() {
             <div style={{ color:"rgba(255,255,255,0.5)", fontSize:10, textTransform:"uppercase", letterSpacing:2, marginBottom:8 }}>Measurable Outcomes</div>
             {[["99.9%","Uptime SLA"],["30%","Cost Reduction"],["95%+","HIPAA Audit Score"],["75%","Latency Reduction"],["80%","Staff Adoption (6mo)"],["Year 3","Positive ROI Target"]].map(([v,l], i) => (
               <div key={i} style={{ display:"flex", justifyContent:"space-between", marginBottom:5, paddingBottom:5, borderBottom:"1px solid rgba(255,255,255,0.08)" }}>
-                <span style={{ color:"#93C5FD", fontWeight:700, fontSize:13 }}>{v}</span>
-                <span style={{ color:"rgba(255,255,255,0.6)", fontSize:12 }}>{l}</span>
+                <span style={{ color:"#93C5FD", fontWeight:700, fontSize:15 }}>{v}</span>
+                <span style={{ color:"rgba(255,255,255,0.6)", fontSize:13 }}>{l}</span>
               </div>
             ))}
           </div>
@@ -184,10 +184,10 @@ function ExecutiveSummary() {
             { label:"Cloud Cost Mgmt", status:"Demo Mode", color:C.teal, note:"Connect AWS for live data" },
           ].map((r, i) => (
             <div key={i} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"7px 0", borderBottom:`1px solid ${C.border}` }}>
-              <span style={{ color:C.text, fontSize:12 }}>{r.label}</span>
+              <span style={{ color:C.text, fontSize:14 }}>{r.label}</span>
               <div style={{ display:"flex", gap:8, alignItems:"center" }}>
-                <span style={{ color:C.slate, fontSize:11 }}>{r.note}</span>
-                <span style={{ background:r.color === C.green ? C.greenSoft : r.color === C.amber ? C.amberSoft : C.tealSoft, color:r.color, fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:20 }}>{r.status}</span>
+                <span style={{ color:C.slate, fontSize:12 }}>{r.note}</span>
+                <span style={{ background:r.color === C.green ? C.greenSoft : r.color === C.amber ? C.amberSoft : C.tealSoft, color:r.color, fontSize:11, fontWeight:700, padding:"2px 8px", borderRadius:20 }}>{r.status}</span>
               </div>
             </div>
           ))}
@@ -195,12 +195,12 @@ function ExecutiveSummary() {
 
         <Card>
           <ST>Board-Level Narrative & Recommended Actions</ST>
-          <p style={{ color:C.textMid, fontSize:13, lineHeight:1.7 }}>
+          <p style={{ color:C.textMid, fontSize:15, lineHeight:1.7 }}>
             VitalCore's AWS migration presents a compelling strategic case. The simulation confirms a positive 5-year NPV
             with payback by Year 3, driven primarily by downtime reduction and compliance savings across 8 hospital facilities.
             HIPAA compliance at 87% requires immediate remediation before go-live to meet the 95% audit threshold.
           </p>
-          <p style={{ color:C.textMid, fontSize:13, lineHeight:1.7 }}>
+          <p style={{ color:C.textMid, fontSize:15, lineHeight:1.7 }}>
             DevOps performance is at the High DORA tier — increasing automation above 70% will unlock Elite performance
             and reduce change failure rate by an estimated 40%. Organizational adoption projections show 76% peak adoption,
             contingent on 30+ training hours and 70%+ leadership engagement.
@@ -214,8 +214,8 @@ function ExecutiveSummary() {
             <div key={r.n} style={{ display:"flex", gap:12, marginBottom:12, padding:"10px 14px", background:C.surfaceAlt, borderRadius:8, border:`1px solid ${C.border}` }}>
               <div style={{ width:24, height:24, borderRadius:"50%", background:r.color, color:C.white, display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:700, flexShrink:0 }}>{r.n}</div>
               <div>
-                <div style={{ color:C.text, fontSize:13, fontWeight:600 }}>{r.action}</div>
-                <div style={{ color:C.slate, fontSize:12, marginTop:2 }}>{r.detail}</div>
+                <div style={{ color:C.text, fontSize:15, fontWeight:600 }}>{r.action}</div>
+                <div style={{ color:C.slate, fontSize:13, marginTop:3 }}>{r.detail}</div>
               </div>
             </div>
           ))}
@@ -1158,7 +1158,7 @@ function AboutDeployment() {
     <div>
       <PH title="About & Deployment" subtitle="AWS infrastructure overview, costs, security posture, and shutdown procedures" />
 
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14, marginBottom:14 }}>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gridTemplateRows:"auto auto", gap:16 }}>
         <Card>
           <ST>AWS Services Used</ST>
           {[
@@ -1166,16 +1166,16 @@ function AboutDeployment() {
             { icon:"🔐", name:"Amazon Cognito", desc:"User pool for email/password auth with JWT tokens" },
             { icon:"🌐", name:"CloudFront CDN", desc:"Global edge caching for low-latency delivery" },
             { icon:"🗄", name:"Amazon S3", desc:"Stores static build artifacts and Amplify deployment bundles" },
-          ].map((s, i) => (
-            <div key={i} style={{ display:"flex", gap:12, padding:"9px 0", borderBottom:`1px solid ${C.border}` }}>
-              <div style={{ fontSize:20, flexShrink:0, width:28, textAlign:"center" }}>{s.icon}</div>
-              <div>
-                <div style={{ color:C.text, fontSize:13, fontWeight:600 }}>{s.name}</div>
-                <div style={{ color:C.slate, fontSize:12, marginTop:2 }}>{s.desc}</div>
+          ].map((s, i, arr) => (
+            <div key={i} style={{ display:"flex", gap:14, padding:"12px 0", borderBottom: i < arr.length - 1 ? `1px solid ${C.border}` : "none", alignItems:"center", minHeight:56 }}>
+              <div style={{ fontSize:22, flexShrink:0, width:32, textAlign:"center" }}>{s.icon}</div>
+              <div style={{ flex:1 }}>
+                <div style={{ color:C.text, fontSize:14, fontWeight:600 }}>{s.name}</div>
+                <div style={{ color:C.slate, fontSize:13, marginTop:3 }}>{s.desc}</div>
               </div>
             </div>
           ))}
-          <div style={{ marginTop:14 }}>
+          <div style={{ marginTop:16 }}>
             <ST>GitHub Repository</ST>
             <a href="https://github.com/dkam4/CSCI176-Final-Project" target="_blank" rel="noreferrer"
               style={{ color:C.accent, fontSize:13, fontWeight:600, wordBreak:"break-all" }}>
@@ -1186,34 +1186,32 @@ function AboutDeployment() {
 
         <Card>
           <ST>Estimated Monthly Cost</ST>
-          <table style={{ width:"100%", borderCollapse:"collapse", fontSize:12 }}>
+          <table style={{ width:"100%", borderCollapse:"collapse", fontSize:13 }}>
             <thead>
               <tr style={{ background:C.surfaceAlt }}>
-                <th style={{ padding:"7px 10px", textAlign:"left", color:C.slate, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>Service</th>
-                <th style={{ padding:"7px 10px", textAlign:"left", color:C.slate, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>Detail</th>
-                <th style={{ padding:"7px 10px", textAlign:"right", color:C.slate, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>Est. Cost</th>
+                <th style={{ padding:"9px 12px", textAlign:"left", color:C.slate, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>Service</th>
+                <th style={{ padding:"9px 12px", textAlign:"left", color:C.slate, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>Detail</th>
+                <th style={{ padding:"9px 12px", textAlign:"right", color:C.slate, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>Est. Cost</th>
               </tr>
             </thead>
             <tbody>
               {costRows.map((r, i) => (
                 <tr key={r.service} style={{ background:i%2===0?C.surface:C.surfaceAlt }}>
-                  <td style={{ padding:"7px 10px", color:i===costRows.length-1?C.text:C.textMid, fontWeight:i===costRows.length-1?700:400, borderBottom:`1px solid ${C.border}` }}>{r.service}</td>
-                  <td style={{ padding:"7px 10px", color:C.slate, borderBottom:`1px solid ${C.border}` }}>{r.detail}</td>
-                  <td style={{ padding:"7px 10px", textAlign:"right", color:i===costRows.length-1?C.green:C.accent, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>{r.est}</td>
+                  <td style={{ padding:"9px 12px", color:i===costRows.length-1?C.text:C.textMid, fontWeight:i===costRows.length-1?700:400, borderBottom:`1px solid ${C.border}` }}>{r.service}</td>
+                  <td style={{ padding:"9px 12px", color:C.slate, borderBottom:`1px solid ${C.border}` }}>{r.detail}</td>
+                  <td style={{ padding:"9px 12px", textAlign:"right", color:i===costRows.length-1?C.green:C.accent, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>{r.est}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </Card>
-      </div>
 
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
         <Card>
           <ST>Security Assumptions</ST>
           {securityItems.map((item, i) => (
-            <div key={i} style={{ display:"flex", gap:10, padding:"8px 0", borderBottom:`1px solid ${C.border}` }}>
-              <span style={{ color:C.green, fontSize:14, flexShrink:0 }}>✓</span>
-              <span style={{ color:C.textMid, fontSize:13, lineHeight:1.5 }}>{item}</span>
+            <div key={i} style={{ display:"flex", gap:12, padding:"10px 0", borderBottom:`1px solid ${C.border}` }}>
+              <span style={{ color:C.green, fontSize:15, flexShrink:0 }}>✓</span>
+              <span style={{ color:C.textMid, fontSize:13, lineHeight:1.55 }}>{item}</span>
             </div>
           ))}
         </Card>
@@ -1221,11 +1219,11 @@ function AboutDeployment() {
         <Card>
           <ST>Shutdown & Budget-Limiting Mechanisms</ST>
           {shutdownItems.map((item, i) => (
-            <div key={i} style={{ display:"flex", gap:12, marginBottom:12, padding:"10px 14px", background:C.surfaceAlt, borderRadius:8, border:`1px solid ${C.border}` }}>
-              <div style={{ width:22, height:22, borderRadius:"50%", background:C.accent, color:C.white, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, flexShrink:0 }}>{i+1}</div>
+            <div key={i} style={{ display:"flex", gap:12, marginBottom:12, padding:"12px 14px", background:C.surfaceAlt, borderRadius:8, border:`1px solid ${C.border}` }}>
+              <div style={{ width:24, height:24, borderRadius:"50%", background:C.accent, color:C.white, display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:700, flexShrink:0 }}>{i+1}</div>
               <div>
-                <div style={{ color:C.text, fontSize:13, fontWeight:600 }}>{item.title}</div>
-                <div style={{ color:C.slate, fontSize:12, marginTop:3, lineHeight:1.5 }}>{item.detail}</div>
+                <div style={{ color:C.text, fontSize:14, fontWeight:600 }}>{item.title}</div>
+                <div style={{ color:C.slate, fontSize:13, marginTop:4, lineHeight:1.55 }}>{item.detail}</div>
               </div>
             </div>
           ))}
