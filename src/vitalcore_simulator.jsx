@@ -5,6 +5,19 @@ import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   ResponsiveContainer, ReferenceLine, Cell
 } from "recharts";
+import { Amplify } from "aws-amplify";
+import { signIn, signUp, signOut, getCurrentUser, confirmSignUp, confirmSignIn } from "aws-amplify/auth";
+
+Amplify.configure({
+  Auth: {
+    Cognito: {
+      region: "us-east-2",
+      userPoolId: "us-east-2_ohVJORU4Z",
+      userPoolClientId: "3ftoram6oq0ri1klm4no0bf910",
+      loginWith: { email: true },
+    },
+  },
+});
 
 const C = {
   bg:"#F5F7FA", surface:"#FFFFFF", surfaceAlt:"#F0F4F8",
@@ -27,6 +40,7 @@ const NAV = [
   { label:"Innovation", icon:"🤖", subTabs:["AI Investment Explorer"] },
   { label:"Adoption", icon:"📈", subTabs:["Org Adoption","Market Diffusion"] },
   { label:"Cost Management", icon:"☁️", subTabs:["Cloud Cost Management"], badge:"EC" },
+  { label:"About & Deployment", icon:"🚀", subTabs:["AWS Deployment Info"], badge:"EC2" },
 ];
 
 const TT = { background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, boxShadow:C.shadowMd, color:C.text, fontSize:12 };
@@ -1115,6 +1129,114 @@ function CostManagement() {
   );
 }
 
+// ── About & Deployment ────────────────────────────────────────────────────────
+function AboutDeployment() {
+  const costRows = [
+    { service:"AWS Amplify Hosting", detail:"Hosting + CI/CD builds", est:"$5–15/mo" },
+    { service:"Amazon Cognito", detail:"Up to 50,000 MAU free tier", est:"$0–5/mo" },
+    { service:"Amazon CloudFront CDN", detail:"~10 GB data transfer/mo", est:"$1–3/mo" },
+    { service:"Amazon S3", detail:"Static asset storage", est:"$1–2/mo" },
+    { service:"Total Estimated", detail:"Typical student/demo workload", est:"$7–25/mo" },
+  ];
+
+  const securityItems = [
+    "HTTPS enforced on all Amplify-hosted endpoints via CloudFront",
+    "JWT tokens issued by Cognito; short-lived access tokens (1 hour)",
+    "Passwords hashed with bcrypt inside Cognito — never stored in plaintext",
+    "All environment variables stored in Amplify Console (not in source code)",
+    "Cognito user pool configured with email-based login only",
+  ];
+
+  const shutdownItems = [
+    { title:"Delete the Amplify App", detail:"AWS Console → Amplify → select app → Actions → Delete app. Removes hosting, CI/CD, and associated CloudFront distribution immediately." },
+    { title:"Delete the Cognito User Pool", detail:"AWS Console → Cognito → User pools → select pool → Delete. Removes all user accounts and authentication infrastructure." },
+    { title:"Set AWS Budget Alert", detail:"AWS Console → Billing → Budgets → Create budget. Set a monthly threshold (e.g. $10) and receive email alerts before costs exceed the limit." },
+    { title:"Enable Cost Explorer", detail:"AWS Console → Billing → Cost Explorer → Enable. Use daily granularity to catch unexpected spend spikes early." },
+  ];
+
+  return (
+    <div>
+      <PH title="About & Deployment" subtitle="AWS infrastructure overview, costs, security posture, and shutdown procedures" />
+
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14, marginBottom:14 }}>
+        <Card>
+          <ST>AWS Services Used</ST>
+          {[
+            { icon:"🏗", name:"Amplify Hosting", desc:"Serves the React SPA via CloudFront with CI/CD from GitHub" },
+            { icon:"🔐", name:"Amazon Cognito", desc:"User pool for email/password auth with JWT tokens" },
+            { icon:"🌐", name:"CloudFront CDN", desc:"Global edge caching for low-latency delivery" },
+            { icon:"🗄", name:"Amazon S3", desc:"Stores static build artifacts and Amplify deployment bundles" },
+          ].map((s, i) => (
+            <div key={i} style={{ display:"flex", gap:12, padding:"9px 0", borderBottom:`1px solid ${C.border}` }}>
+              <div style={{ fontSize:20, flexShrink:0, width:28, textAlign:"center" }}>{s.icon}</div>
+              <div>
+                <div style={{ color:C.text, fontSize:13, fontWeight:600 }}>{s.name}</div>
+                <div style={{ color:C.slate, fontSize:12, marginTop:2 }}>{s.desc}</div>
+              </div>
+            </div>
+          ))}
+          <div style={{ marginTop:14 }}>
+            <ST>GitHub Repository</ST>
+            <a href="https://github.com/dkam4/CSCI176-Final-Project" target="_blank" rel="noreferrer"
+              style={{ color:C.accent, fontSize:13, fontWeight:600, wordBreak:"break-all" }}>
+              github.com/dkam4/CSCI176-Final-Project
+            </a>
+          </div>
+        </Card>
+
+        <Card>
+          <ST>Estimated Monthly Cost</ST>
+          <table style={{ width:"100%", borderCollapse:"collapse", fontSize:12 }}>
+            <thead>
+              <tr style={{ background:C.surfaceAlt }}>
+                <th style={{ padding:"7px 10px", textAlign:"left", color:C.slate, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>Service</th>
+                <th style={{ padding:"7px 10px", textAlign:"left", color:C.slate, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>Detail</th>
+                <th style={{ padding:"7px 10px", textAlign:"right", color:C.slate, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>Est. Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              {costRows.map((r, i) => (
+                <tr key={r.service} style={{ background:i%2===0?C.surface:C.surfaceAlt }}>
+                  <td style={{ padding:"7px 10px", color:i===costRows.length-1?C.text:C.textMid, fontWeight:i===costRows.length-1?700:400, borderBottom:`1px solid ${C.border}` }}>{r.service}</td>
+                  <td style={{ padding:"7px 10px", color:C.slate, borderBottom:`1px solid ${C.border}` }}>{r.detail}</td>
+                  <td style={{ padding:"7px 10px", textAlign:"right", color:i===costRows.length-1?C.green:C.accent, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>{r.est}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Card>
+      </div>
+
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
+        <Card>
+          <ST>Security Assumptions</ST>
+          {securityItems.map((item, i) => (
+            <div key={i} style={{ display:"flex", gap:10, padding:"8px 0", borderBottom:`1px solid ${C.border}` }}>
+              <span style={{ color:C.green, fontSize:14, flexShrink:0 }}>✓</span>
+              <span style={{ color:C.textMid, fontSize:13, lineHeight:1.5 }}>{item}</span>
+            </div>
+          ))}
+        </Card>
+
+        <Card>
+          <ST>Shutdown & Budget-Limiting Mechanisms</ST>
+          {shutdownItems.map((item, i) => (
+            <div key={i} style={{ display:"flex", gap:12, marginBottom:12, padding:"10px 14px", background:C.surfaceAlt, borderRadius:8, border:`1px solid ${C.border}` }}>
+              <div style={{ width:22, height:22, borderRadius:"50%", background:C.accent, color:C.white, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, flexShrink:0 }}>{i+1}</div>
+              <div>
+                <div style={{ color:C.text, fontSize:13, fontWeight:600 }}>{item.title}</div>
+                <div style={{ color:C.slate, fontSize:12, marginTop:3, lineHeight:1.5 }}>{item.detail}</div>
+              </div>
+            </div>
+          ))}
+        </Card>
+      </div>
+
+      <Insight text="All AWS resources for this project operate within the free tier or under $25/month. Enable AWS Budgets with a $10 alert threshold to prevent unexpected charges. Deleting the Amplify app and Cognito user pool removes all billable infrastructure immediately." />
+    </div>
+  );
+}
+
 // ── Panel Map ─────────────────────────────────────────────────────────────────
 const PANEL_MAP = [
   [ExecutiveSummary],
@@ -1124,6 +1246,7 @@ const PANEL_MAP = [
   [AIInvestment],
   [OrgAdoption, MarketDiffusion],
   [CostManagement],
+  [AboutDeployment],
 ];
 
 // ── Co-Pilot ──────────────────────────────────────────────────────────────────
@@ -1188,11 +1311,143 @@ function CoPilot({ activeNav, activeSub }) {
   );
 }
 
+// ── Login Screen ──────────────────────────────────────────────────────────────
+function LoginScreen({ onLogin }) {
+  const [mode, setMode] = useState("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmCode, setConfirmCode] = useState("");
+  const [needsConfirm, setNeedsConfirm] = useState(false);
+  const [needsNewPassword, setNeedsNewPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const inputStyle = {
+    width:"100%", background:"rgba(255,255,255,0.07)", border:"1px solid rgba(255,255,255,0.15)",
+    borderRadius:8, padding:"11px 14px", color:C.white, fontSize:14, outline:"none",
+    marginBottom:12, boxSizing:"border-box",
+  };
+
+  const handleSubmit = async () => {
+    setError("");
+    if (!email.trim() || !password.trim()) { setError("Email and password are required."); return; }
+    setLoading(true);
+    try {
+      if (needsConfirm) {
+        await confirmSignUp({ username: email, confirmationCode: confirmCode });
+        const r = await signIn({ username: email, password });
+        if (r.isSignedIn) onLogin();
+      } else if (needsNewPassword) {
+        const r = await confirmSignIn({ challengeResponse: newPassword });
+        if (r.isSignedIn) onLogin();
+      } else if (mode === "login") {
+        const r = await signIn({ username: email, password });
+        if (r.isSignedIn) onLogin();
+        else if (r.nextStep?.signInStep === "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED") setNeedsNewPassword(true);
+        else setError(`Sign-in step required: ${r.nextStep?.signInStep}`);
+      } else {
+        const r = await signUp({ username: email, password, options: { userAttributes: { email } } });
+        if (r.isSignUpComplete) {
+          const lr = await signIn({ username: email, password });
+          if (lr.isSignedIn) onLogin();
+        } else {
+          setNeedsConfirm(true);
+        }
+      }
+    } catch (e) {
+      setError(e.message || "Authentication failed. Please try again.");
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", height:"100vh", width:"100vw", background:C.navy, fontFamily:"'Inter',system-ui,sans-serif" }}>
+      <style>{`* { box-sizing: border-box; margin: 0; padding: 0; }`}</style>
+      <div style={{ width:"100%", maxWidth:400, padding:"0 20px" }}>
+        <div style={{ textAlign:"center", marginBottom:36 }}>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginBottom:8 }}>
+            <div style={{ width:10, height:10, borderRadius:"50%", background:"#34D399", boxShadow:"0 0 8px #34D399" }} />
+            <span style={{ color:C.white, fontWeight:700, fontSize:22, letterSpacing:0.5 }}>VitalCore Health</span>
+          </div>
+          <div style={{ color:"rgba(255,255,255,0.45)", fontSize:13 }}>AWS Cloud Migration Simulator</div>
+        </div>
+
+        <div style={{ background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:14, padding:"28px 28px" }}>
+          <div style={{ display:"flex", marginBottom:22, background:"rgba(0,0,0,0.2)", borderRadius:8, padding:3 }}>
+            {["login","signup"].map(m => (
+              <button key={m} onClick={() => { setMode(m); setError(""); setNeedsConfirm(false); }}
+                style={{ flex:1, padding:"8px", borderRadius:6, border:"none", cursor:"pointer", fontSize:13, fontWeight:700,
+                  background:mode===m?"rgba(37,99,235,0.9)":"transparent",
+                  color:mode===m?C.white:"rgba(255,255,255,0.45)", transition:"all 0.15s" }}>
+                {m === "login" ? "Log In" : "Sign Up"}
+              </button>
+            ))}
+          </div>
+
+          {needsNewPassword ? (
+            <>
+              <div style={{ color:"rgba(255,255,255,0.6)", fontSize:13, marginBottom:14, lineHeight:1.5 }}>
+                Your account requires a new password before you can continue.
+              </div>
+              <input value={newPassword} onChange={e => setNewPassword(e.target.value)}
+                placeholder="New password" type="password" style={inputStyle}
+                onKeyDown={e => e.key === "Enter" && handleSubmit()} />
+            </>
+          ) : needsConfirm ? (
+            <>
+              <div style={{ color:"rgba(255,255,255,0.6)", fontSize:13, marginBottom:14, lineHeight:1.5 }}>
+                Check your email for a confirmation code and enter it below.
+              </div>
+              <input value={confirmCode} onChange={e => setConfirmCode(e.target.value)}
+                placeholder="Confirmation code" style={inputStyle}
+                onKeyDown={e => e.key === "Enter" && handleSubmit()} />
+            </>
+          ) : (
+            <>
+              <input value={email} onChange={e => setEmail(e.target.value)}
+                placeholder="Email address" type="email" style={inputStyle}
+                onKeyDown={e => e.key === "Enter" && handleSubmit()} />
+              <input value={password} onChange={e => setPassword(e.target.value)}
+                placeholder="Password" type="password" style={inputStyle}
+                onKeyDown={e => e.key === "Enter" && handleSubmit()} />
+            </>
+          )}
+
+          {error && (
+            <div style={{ background:"rgba(220,38,38,0.15)", border:"1px solid rgba(220,38,38,0.4)", borderRadius:8, padding:"9px 12px", color:"#FCA5A5", fontSize:13, marginBottom:12 }}>
+              {error}
+            </div>
+          )}
+
+          <button onClick={handleSubmit} disabled={loading}
+            style={{ width:"100%", background:loading?"rgba(37,99,235,0.5)":C.accent, border:"none", borderRadius:8, padding:"12px", color:C.white, fontWeight:700, fontSize:14, cursor:loading?"not-allowed":"pointer", transition:"background 0.15s" }}>
+            {loading ? "Please wait…" : needsNewPassword ? "Set Password" : needsConfirm ? "Verify Code" : mode === "login" ? "Log In" : "Create Account"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Main App ──────────────────────────────────────────────────────────────────
 export default function App() {
   const [activeNav, setActiveNav] = useState(0);
   const [activeSubs, setActiveSubs] = useState(NAV.map(() => 0));
   const [showCopilot, setShowCopilot] = useState(true);
+  const [user, setUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    getCurrentUser()
+      .then(u => { setUser(u); setAuthChecked(true); })
+      .catch(() => setAuthChecked(true));
+  }, []);
+
+  const handleLogout = async () => {
+    try { await signOut(); } catch {}
+    setUser(null);
+  };
 
   const activeSub = activeSubs[activeNav];
   const PanelComponent = PANEL_MAP[activeNav][activeSub];
@@ -1200,6 +1455,25 @@ export default function App() {
   const setActiveSub = (i) => {
     setActiveSubs(prev => { const n = [...prev]; n[activeNav] = i; return n; });
   };
+
+  if (!authChecked) {
+    return (
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"center", height:"100vh", background:C.navy, fontFamily:"'Inter',system-ui,sans-serif" }}>
+        <div style={{ color:"rgba(255,255,255,0.45)", fontSize:14 }}>Loading…</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <LoginScreen onLogin={async () => {
+      try {
+        const u = await getCurrentUser();
+        setUser(u);
+      } catch {
+        setUser({ username: "authenticated" });
+      }
+    }} />;
+  }
 
   return (
     <div style={{ display:"flex", flexDirection:"column", height:"100vh", minHeight:"100vh", width:"100vw", maxWidth:"100%", background:C.bg, color:C.text, fontFamily:"'Inter',system-ui,sans-serif", position:"fixed", top:0, left:0, right:0, bottom:0, overflow:"hidden" }}>
@@ -1219,9 +1493,14 @@ export default function App() {
           <span style={{ color:"rgba(255,255,255,0.4)", fontSize:13 }}>AWS Cloud Migration Simulator</span>
           <span style={{ background:"rgba(52,211,153,0.15)", color:"#34D399", fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:20 }}>LIVE</span>
         </div>
-        <button onClick={() => setShowCopilot(!showCopilot)} style={{ background:showCopilot?"rgba(37,99,235,0.9)":"rgba(255,255,255,0.1)", border:`1px solid ${showCopilot?"#3B82F6":"rgba(255,255,255,0.2)"}`, borderRadius:8, padding:"6px 14px", color:C.white, fontWeight:600, cursor:"pointer", fontSize:12 }}>
-          {showCopilot ? "Hide Advisor" : "🤖 AI Advisor"}
-        </button>
+        <div style={{ display:"flex", gap:8, alignItems:"center" }}>
+          <button onClick={() => setShowCopilot(!showCopilot)} style={{ background:showCopilot?"rgba(37,99,235,0.9)":"rgba(255,255,255,0.1)", border:`1px solid ${showCopilot?"#3B82F6":"rgba(255,255,255,0.2)"}`, borderRadius:8, padding:"6px 14px", color:C.white, fontWeight:600, cursor:"pointer", fontSize:12 }}>
+            {showCopilot ? "Hide Advisor" : "🤖 AI Advisor"}
+          </button>
+          <button onClick={handleLogout} style={{ background:"rgba(255,255,255,0.08)", border:"1px solid rgba(255,255,255,0.15)", borderRadius:8, padding:"6px 14px", color:"rgba(255,255,255,0.7)", fontWeight:600, cursor:"pointer", fontSize:12 }}>
+            Log Out
+          </button>
+        </div>
       </div>
 
       <div style={{ display:"flex", overflowX:"auto", borderBottom:`1px solid ${C.border}`, flexShrink:0, background:C.surface, padding:"0 4px" }}>
