@@ -28,3 +28,5 @@ Persistent sidebar powered by the Claude API — answers board-level questions i
 
 ## Built With
 React, Recharts, Claude API (claude-sonnet-4-6)
+
+- This project was implemented in React/Vite rather than Streamlit. React was selected to provide a richer, more responsive interactive dashboard while fulfilling the same functional requirements outlined in the assignment.
