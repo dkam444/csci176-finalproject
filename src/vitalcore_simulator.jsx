@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   LineChart, Line, BarChart, Bar, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
@@ -1247,68 +1247,6 @@ const PANEL_MAP = [
   [AboutDeployment],
 ];
 
-// ── Co-Pilot ──────────────────────────────────────────────────────────────────
-function CoPilot({ activeNav, activeSub }) {
-  const [messages, setMessages] = useState([{ role:"assistant", content:"Hi! I'm VitalCore's AI Board Advisor.\n\nAsk me anything about the simulation — financials, governance, risk, or adoption strategy." }]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const bottomRef = useRef(null);
-
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior:"smooth" }); }, [messages]);
-
-  const currentPage = `${NAV[activeNav].label}${NAV[activeNav].subTabs.length>1?" > "+NAV[activeNav].subTabs[activeSub]:""}`;
-
-  const send = useCallback(async () => {
-    if (!input.trim() || loading) return;
-    const userMsg = input.trim();
-    setInput("");
-    setMessages(prev => [...prev, { role:"user", content:userMsg }]);
-    setLoading(true);
-    try {
-      const system = `You are an AI Board Advisor for VitalCore Health, a hospital network (8 hospitals, ~4,000 employees) migrating from on-prem to AWS. The user is viewing: "${currentPage}". You oversee a complete cloud migration simulation with 7 sections: Executive Summary (purpose/stakeholders/outcomes), Financial (TCO/NPV/ROI + value realization), Governance (HIPAA compliance + decision rights), Operations (DevOps/DORA + resilience/HA), Innovation (AI investment ROI), Adoption (org adoption + market diffusion), Cost Management (AWS FinOps). Respond in concise executive board language. Max 3-4 sentences. Be quantitative and action-oriented.`;
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:1000, system, messages:[...messages.filter((_,i)=>i>0), { role:"user", content:userMsg }] })
-      });
-      const data = await res.json();
-      setMessages(prev => [...prev, { role:"assistant", content:data.content?.[0]?.text || "Unable to respond. Please try again." }]);
-    } catch {
-      setMessages(prev => [...prev, { role:"assistant", content:"Connection error. Please try again." }]);
-    }
-    setLoading(false);
-  }, [input, loading, messages, currentPage]);
-
-  const suggestions = ["What's the ROI impact of cutting CapEx 20%?","How do we close the HIPAA compliance gap?","When does cloud investment break even?","What's the biggest adoption risk?"];
-
-  return (
-    <div style={{ display:"flex", flexDirection:"column", height:"100%", background:C.surface, borderLeft:`1px solid ${C.border}` }}>
-      <div style={{ padding:"14px 16px", borderBottom:`1px solid ${C.border}`, background:C.navy }}>
-        <div style={{ color:C.white, fontSize:12, fontWeight:700, letterSpacing:1 }}>AI BOARD ADVISOR</div>
-        <div style={{ color:"rgba(255,255,255,0.45)", fontSize:11, marginTop:1 }}>Claude · {currentPage}</div>
-      </div>
-      <div style={{ flex:1, overflowY:"auto", padding:"14px", display:"flex", flexDirection:"column", gap:10 }}>
-        {messages.map((m, i) => (
-          <div key={i} style={{ alignSelf:m.role==="user"?"flex-end":"flex-start", maxWidth:"92%", background:m.role==="user"?C.navy:C.surfaceAlt, border:`1px solid ${m.role==="user"?C.navy:C.border}`, borderRadius:m.role==="user"?"12px 12px 2px 12px":"12px 12px 12px 2px", padding:"9px 13px", color:m.role==="user"?C.white:C.text, fontSize:12, lineHeight:1.55, whiteSpace:"pre-wrap" }}>{m.content}</div>
-        ))}
-        {loading && <div style={{ alignSelf:"flex-start", color:C.slateLight, fontSize:12, padding:"8px 12px", background:C.surfaceAlt, borderRadius:"12px 12px 12px 2px", border:`1px solid ${C.border}` }}>Analyzing…</div>}
-        <div ref={bottomRef} />
-      </div>
-      {messages.length <= 1 && (
-        <div style={{ padding:"0 14px 10px" }}>
-          {suggestions.map((s, i) => (
-            <button key={i} onClick={() => setInput(s)} style={{ display:"block", width:"100%", textAlign:"left", background:C.accentSoft, border:`1px solid #BFDBFE`, borderRadius:8, padding:"7px 10px", marginBottom:5, color:C.accent, fontSize:11, cursor:"pointer", fontWeight:500 }}>{s}</button>
-          ))}
-        </div>
-      )}
-      <div style={{ padding:"10px 12px", borderTop:`1px solid ${C.border}`, display:"flex", gap:8 }}>
-        <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==="Enter" && send()} placeholder="Ask a board-level question…" style={{ flex:1, background:C.surfaceAlt, border:`1px solid ${C.border}`, borderRadius:8, padding:"8px 11px", color:C.text, fontSize:12, outline:"none" }} />
-        <button onClick={send} disabled={loading} style={{ background:C.accent, border:"none", borderRadius:8, padding:"8px 13px", color:C.white, fontWeight:700, cursor:loading?"not-allowed":"pointer", fontSize:13, opacity:loading?0.6:1 }}>→</button>
-      </div>
-    </div>
-  );
-}
-
 // ── Login Screen ──────────────────────────────────────────────────────────────
 function LoginScreen({ onLogin }) {
   const [mode, setMode] = useState("login");
@@ -1431,7 +1369,6 @@ function LoginScreen({ onLogin }) {
 export default function App() {
   const [activeNav, setActiveNav] = useState(0);
   const [activeSubs, setActiveSubs] = useState(NAV.map(() => 0));
-  const [showCopilot, setShowCopilot] = useState(true);
   const [user, setUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(false);
 
@@ -1490,14 +1427,9 @@ export default function App() {
           <span style={{ color:"rgba(255,255,255,0.4)", fontSize:13 }}>AWS Cloud Migration Simulator</span>
           <span style={{ background:"rgba(52,211,153,0.15)", color:"#34D399", fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:20 }}>LIVE</span>
         </div>
-        <div style={{ display:"flex", gap:8, alignItems:"center" }}>
-          <button onClick={() => setShowCopilot(!showCopilot)} style={{ background:showCopilot?"rgba(37,99,235,0.9)":"rgba(255,255,255,0.1)", border:`1px solid ${showCopilot?"#3B82F6":"rgba(255,255,255,0.2)"}`, borderRadius:8, padding:"6px 14px", color:C.white, fontWeight:600, cursor:"pointer", fontSize:12 }}>
-            {showCopilot ? "Hide Advisor" : "🤖 AI Advisor"}
-          </button>
-          <button onClick={handleLogout} style={{ background:"rgba(255,255,255,0.08)", border:"1px solid rgba(255,255,255,0.15)", borderRadius:8, padding:"6px 14px", color:"rgba(255,255,255,0.7)", fontWeight:600, cursor:"pointer", fontSize:12 }}>
-            Log Out
-          </button>
-        </div>
+        <button onClick={handleLogout} style={{ background:"rgba(255,255,255,0.08)", border:"1px solid rgba(255,255,255,0.15)", borderRadius:8, padding:"6px 14px", color:"rgba(255,255,255,0.7)", fontWeight:600, cursor:"pointer", fontSize:12 }}>
+          Log Out
+        </button>
       </div>
 
       <div style={{ display:"flex", overflowX:"auto", borderBottom:`1px solid ${C.border}`, flexShrink:0, background:C.surface, padding:"0 4px" }}>
@@ -1517,11 +1449,6 @@ export default function App() {
           )}
           <PanelComponent />
         </div>
-        {showCopilot && (
-          <div style={{ width:270, flexShrink:0, borderLeft:`1px solid ${C.border}`, display:"flex", flexDirection:"column", minHeight:0 }}>
-            <CoPilot activeNav={activeNav} activeSub={activeSub} />
-          </div>
-        )}
       </div>
     </div>
   );
