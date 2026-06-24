@@ -284,6 +284,40 @@ function FinancialDashboard() {
           </Card>
         </div>
       </div>
+      <Card style={{ marginTop:14 }}>
+        <ST>5-Year Cash Flow Table</ST>
+        <div style={{ overflowX:"auto" }}>
+          <table style={{ width:"100%", borderCollapse:"collapse", fontSize:12 }}>
+            <thead>
+              <tr style={{ background:C.surfaceAlt }}>
+                {["", "Year 1","Year 2","Year 3","Year 4","Year 5"].map(h => (
+                  <th key={h} style={{ padding:"8px 12px", textAlign:"right", color:C.slate, fontWeight:600, borderBottom:`1px solid ${C.border}`, textAlign: h===""?"left":"right" }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { label:"Capital", values: cf.map(r => r.capex > 0 ? -r.capex : 0), color: C.amber },
+                { label:"Revenue", values: cf.map(r => Math.round(r.opex * (1 + savings/100))), color: C.green },
+                { label:"Expense", values: cf.map(r => -r.opex), color: C.red },
+                { label:"Net Profit", values: cf.map(r => r.net), color: C.accent },
+                { label:"Cumulative Cash", values: cf.map((_, i) => cumData[i].cumROI * 1000), color: C.teal },
+              ].map((row, ri) => {
+                return (
+                  <tr key={row.label} style={{ background: ri % 2 === 0 ? C.surface : C.surfaceAlt }}>
+                    <td style={{ padding:"8px 12px", color:C.textMid, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>{row.label}</td>
+                    {row.values.map((v, i) => (
+                      <td key={i} style={{ padding:"8px 12px", textAlign:"right", color: v >= 0 ? C.green : C.red, fontWeight:500, borderBottom:`1px solid ${C.border}` }}>
+                        {v >= 0 ? "+" : ""}${(v/1e3).toFixed(0)}K
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </Card>
       <Insight text={`VitalCore's AWS migration requires $${(capex/1e3).toFixed(0)}K upfront. At ${savings}% cloud savings, payback is ${payback.toFixed(1)} years with a 5-year NPV of $${(npv/1e3).toFixed(0)}K — ${npv>0?"a compelling investment case":"requiring cost optimization to justify"}.`} />
     </div>
   );
@@ -363,6 +397,59 @@ function ValueRealization() {
           </Card>
         </div>
       </div>
+
+      {/* Benefit Breakdown Table + Color-coded Zones */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14, marginTop:14 }}>
+        <Card>
+          <ST>Benefit Breakdown Table</ST>
+          <table style={{ width:"100%", borderCollapse:"collapse", fontSize:12 }}>
+            <thead>
+              <tr style={{ background:C.surfaceAlt }}>
+                {["Benefit","Annual Value","5-Year Value","Type"].map(h => (
+                  <th key={h} style={{ padding:"7px 10px", textAlign:"left", color:C.slate, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { benefit:"Productivity Gains", annual: Math.round(pv/1e3), type:"Tangible", color:C.accent },
+                { benefit:"Downtime Reduction", annual: Math.round(dv/1e3), type:"Tangible", color:C.teal },
+                { benefit:"Compliance Savings", annual: Math.round(compliance/1e3), type:"Tangible", color:C.green },
+                { benefit:"CSAT Revenue", annual: Math.round(cv/1e3), type:"Intangible", color:C.amber },
+              ].map((r, i) => (
+                <tr key={r.benefit} style={{ background: i%2===0?C.surface:C.surfaceAlt }}>
+                  <td style={{ padding:"7px 10px", color:C.textMid, borderBottom:`1px solid ${C.border}` }}>{r.benefit}</td>
+                  <td style={{ padding:"7px 10px", color:r.color, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>${r.annual}K</td>
+                  <td style={{ padding:"7px 10px", color:r.color, fontWeight:600, borderBottom:`1px solid ${C.border}` }}>${r.annual*5}K</td>
+                  <td style={{ padding:"7px 10px", borderBottom:`1px solid ${C.border}` }}>
+                    <span style={{ background:r.type==="Tangible"?C.accentSoft:C.amberSoft, color:r.type==="Tangible"?C.accent:C.amber, fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:20 }}>{r.type}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Card>
+        <Card>
+          <ST>Return Scenario Zones</ST>
+          {[
+            { label:"🔴 Under-performing", range:`< $${Math.round(total*0.7/1e3)}K`, desc:"Below 70% of target value", bg:C.redSoft, color:C.red },
+            { label:"🟡 Expected Return", range:`$${Math.round(total*0.7/1e3)}K – $${Math.round(total*1.2/1e3)}K`, desc:"70–120% of target value", bg:C.amberSoft, color:C.amber },
+            { label:"🟢 High Return", range:`> $${Math.round(total*1.2/1e3)}K`, desc:"Above 120% of target value", bg:C.greenSoft, color:C.green },
+          ].map(z => (
+            <div key={z.label} style={{ background:z.bg, borderRadius:8, padding:"10px 14px", marginBottom:10, border:`1px solid ${z.color}30` }}>
+              <div style={{ color:z.color, fontSize:12, fontWeight:700 }}>{z.label}</div>
+              <div style={{ color:z.color, fontSize:13, fontWeight:600 }}>{z.range}</div>
+              <div style={{ color:C.slate, fontSize:11 }}>{z.desc}</div>
+            </div>
+          ))}
+          <div style={{ marginTop:8, padding:"8px 12px", background: total > total*1.2 ? C.greenSoft : total > total*0.7 ? C.amberSoft : C.redSoft, borderRadius:8 }}>
+            <span style={{ fontSize:12, fontWeight:700, color: total > total*1.2 ? C.green : total > total*0.7 ? C.amber : C.red }}>
+              Current: {total > total*1.2 ? "🟢 High Return" : total > total*0.7 ? "🟡 Expected Return" : "🔴 Under-performing"} — ${Math.round(total/1e3)}K total value
+            </span>
+          </div>
+        </Card>
+      </div>
+
       <Insight text={`VitalCore's migration generates $${(total/1e3).toFixed(0)}K in total value. The largest driver is ${dv>pv?"downtime reduction":"productivity gains"}, reflecting critical hospital uptime requirements.`} />
     </div>
   );
@@ -647,6 +734,26 @@ function ResilienceDashboard() {
                 <div style={{ display:"flex", gap:8, alignItems:"center" }}>
                   <span style={{ color:C.slate, fontSize:11 }}>{r.likelihood}</span>
                   <div style={{ width:28, height:14, borderRadius:4, background:r.score>7?C.red:r.score>4?C.amber:C.green, opacity:0.8 }} />
+                </div>
+              </div>
+            ))}
+          </Card>
+          <Card>
+            <ST>Availability Scorecard</ST>
+            {[
+              { label:"Current Uptime", value:`${uptime.toFixed(3)}%`, target:"99.9%", met: uptime >= 99.9 },
+              { label:"Monthly Cost", value:`$${(monthlyCost/1e3).toFixed(0)}K`, target:"< $60K", met: monthlyCost < 60000 },
+              { label:"Risk Score", value:`${riskScore.toFixed(1)}/10`, target:"< 4.0", met: riskScore < 4 },
+              { label:"Recovery Time (RTO)", value:`${rto}h`, target:"≤ 4h", met: rto <= 4 },
+              { label:"Recovery Point (RPO)", value:`${rpo}h`, target:"≤ 1h", met: rpo <= 1 },
+              { label:"Redundancy Level", value:`Level ${redundancy}`, target:"≥ Level 3", met: redundancy >= 3 },
+            ].map(item => (
+              <div key={item.label} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"6px 0", borderBottom:`1px solid ${C.border}` }}>
+                <span style={{ color:C.textMid, fontSize:12 }}>{item.label}</span>
+                <div style={{ display:"flex", gap:10, alignItems:"center" }}>
+                  <span style={{ color:C.slateLight, fontSize:11 }}>Target: {item.target}</span>
+                  <span style={{ color: item.met ? C.green : C.red, fontSize:12, fontWeight:700 }}>{item.value}</span>
+                  <span style={{ fontSize:13 }}>{item.met ? "✅" : "⚠️"}</span>
                 </div>
               </div>
             ))}
@@ -1095,8 +1202,17 @@ export default function App() {
   };
 
   return (
-    <div style={{ display:"flex", flexDirection:"column", height:"100vh", background:C.bg, color:C.text, fontFamily:"'Inter',system-ui,sans-serif" }}>
-      <div style={{ padding:"12px 24px", borderBottom:`1px solid ${C.border}`, display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0, background:C.navy, boxShadow:C.shadowMd }}>
+    <div style={{ display:"flex", flexDirection:"column", height:"100vh", minHeight:"100vh", width:"100vw", maxWidth:"100%", background:C.bg, color:C.text, fontFamily:"'Inter',system-ui,sans-serif", position:"fixed", top:0, left:0, right:0, bottom:0, overflow:"hidden" }}>
+      <style>{`
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html { height: 100%; width: 100%; overflow: hidden; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+        input[type=range] { height: 4px; }
+      `}</style>
+      <div style={{ padding:"10px 20px", borderBottom:`1px solid ${C.border}`, display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0, background:C.navy, boxShadow:C.shadowMd }}>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
           <div style={{ width:8, height:8, borderRadius:"50%", background:"#34D399", boxShadow:"0 0 6px #34D399" }} />
           <span style={{ color:C.white, fontWeight:700, fontSize:15, letterSpacing:0.5 }}>VitalCore Health</span>
@@ -1108,25 +1224,25 @@ export default function App() {
         </button>
       </div>
 
-      <div style={{ display:"flex", overflowX:"auto", borderBottom:`1px solid ${C.border}`, flexShrink:0, background:C.surface, padding:"0 8px" }}>
+      <div style={{ display:"flex", overflowX:"auto", borderBottom:`1px solid ${C.border}`, flexShrink:0, background:C.surface, padding:"0 4px" }}>
         {NAV.map((tab, i) => (
-          <button key={i} onClick={() => setActiveNav(i)} style={{ padding:"11px 16px", border:"none", background:"transparent", cursor:"pointer", color:activeNav===i?C.accent:C.slate, borderBottom:activeNav===i?`2px solid ${C.accent}`:"2px solid transparent", fontSize:12, fontWeight:activeNav===i?700:500, whiteSpace:"nowrap", transition:"color 0.15s", display:"flex", alignItems:"center", gap:6 }}>
+          <button key={i} onClick={() => setActiveNav(i)} style={{ padding:"9px 12px", border:"none", background:"transparent", cursor:"pointer", color:activeNav===i?C.accent:C.slate, borderBottom:activeNav===i?`2px solid ${C.accent}`:"2px solid transparent", fontSize:11, fontWeight:activeNav===i?700:500, whiteSpace:"nowrap", transition:"color 0.15s", display:"flex", alignItems:"center", gap:5 }}>
             <span>{tab.icon}</span>
             <span>{tab.label}</span>
-            {tab.badge && <span style={{ background:C.tealSoft, color:C.teal, fontSize:10, fontWeight:700, padding:"2px 7px", borderRadius:20 }}>{tab.badge}</span>}
+            {tab.badge && <span style={{ background:C.tealSoft, color:C.teal, fontSize:9, fontWeight:700, padding:"1px 6px", borderRadius:20 }}>{tab.badge}</span>}
           </button>
         ))}
       </div>
 
-      <div style={{ flex:1, display:"flex", overflow:"hidden" }}>
-        <div style={{ flex:1, overflowY:"auto", padding:"22px 26px" }}>
+      <div style={{ flex:1, display:"flex", overflow:"hidden", minHeight:0 }}>
+        <div style={{ flex:1, overflowY:"auto", padding:"18px 22px", minWidth:0 }}>
           {NAV[activeNav].subTabs.length > 1 && (
             <SubTabBar tabs={NAV[activeNav].subTabs} active={activeSub} onChange={setActiveSub} />
           )}
           <PanelComponent />
         </div>
         {showCopilot && (
-          <div style={{ width:290, flexShrink:0 }}>
+          <div style={{ width:270, flexShrink:0, borderLeft:`1px solid ${C.border}`, display:"flex", flexDirection:"column", minHeight:0 }}>
             <CoPilot activeNav={activeNav} activeSub={activeSub} />
           </div>
         )}
