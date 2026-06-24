@@ -92,8 +92,14 @@ function ST({ children }) {
 
 function Insight({ text }) {
   return (
-    <div style={{ background:C.accentSoft, border:`1px solid #BFDBFE`, borderRadius:10, padding:"12px 16px", color:C.navyMid, fontSize:13, lineHeight:1.6, display:"flex", gap:10, marginTop:14 }}>
-      <span>💡</span><span>{text}</span>
+    <div style={{ marginTop:14 }}>
+      <div style={{ color:C.accent, fontSize:10, fontWeight:700, letterSpacing:2, textTransform:"uppercase", marginBottom:6, display:"flex", alignItems:"center", gap:8 }}>
+        <div style={{ width:3, height:12, background:C.accent, borderRadius:2 }} />
+        Executive Recommendations
+      </div>
+      <div style={{ background:C.accentSoft, border:`1px solid #BFDBFE`, borderRadius:10, padding:"12px 16px", color:C.navyMid, fontSize:13, lineHeight:1.6, display:"flex", gap:10 }}>
+        <span>💡</span><span>{text}</span>
+      </div>
     </div>
   );
 }
