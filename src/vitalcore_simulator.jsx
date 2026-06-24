@@ -1360,9 +1360,8 @@ function LoginScreen({ onLogin }) {
   };
 
   return (
-    <div style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", height:"100vh", width:"100vw", background:C.navy, fontFamily:"'Inter',system-ui,sans-serif" }}>
-      <style>{`* { box-sizing: border-box; margin: 0; padding: 0; }`}</style>
-      <div style={{ width:"100%", maxWidth:400, padding:"0 20px" }}>
+    <div style={{ position:"fixed", top:0, left:0, right:0, bottom:0, display:"flex", alignItems:"center", justifyContent:"center", background:C.navy, fontFamily:"'Inter',system-ui,sans-serif" }}>
+      <div style={{ width:400, maxWidth:"calc(100vw - 40px)" }}>
         <div style={{ textAlign:"center", marginBottom:36 }}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginBottom:8 }}>
             <div style={{ width:10, height:10, borderRadius:"50%", background:"#34D399", boxShadow:"0 0 8px #34D399" }} />
