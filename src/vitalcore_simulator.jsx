@@ -1562,7 +1562,7 @@ export default function App() {
 
       <div style={{ flex:1, display:"flex", overflow:"hidden", minHeight:0 }}>
         <div style={{ flex:1, overflowY:"auto", padding:"18px 22px", minWidth:0 }}>
-          {NAV[activeNav].subTabs.length > 1 && (
+          {NAV[activeNav].subTabs.length >= 1 && (
             <SubTabBar tabs={NAV[activeNav].subTabs} active={activeSub} onChange={setActiveSub} />
           )}
           <PanelComponent />
