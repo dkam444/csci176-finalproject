@@ -133,14 +133,21 @@ function SubTabBar({ tabs, active, onChange }) {
 function ExecutiveSummary() {
   return (
     <div>
-      <PH title="VitalCore Health — AWS Cloud Migration" subtitle="Executive Board Briefing" />
+      <div style={{ marginBottom:20, paddingBottom:16, borderBottom:`1px solid ${C.border}` }}>
+        <h1 style={{ color:C.navy, fontSize:28, fontWeight:800, margin:"0 0 6px", letterSpacing:-0.5 }}>Crimson3 Vitals — AWS Cloud Migration</h1>
+        <p style={{ color:C.slate, fontSize:14, margin:0 }}>Executive Board Briefing</p>
+      </div>
+
+      <div style={{ color:C.textMid, fontSize:14, lineHeight:1.8, marginBottom:16, paddingLeft:2 }}>
+        Crimson3 Vitals is a regional healthcare network operating <strong style={{ color:C.text }}>8 hospitals</strong> and <strong style={{ color:C.text }}>24 clinics</strong> across the northeastern United States, serving <strong style={{ color:C.text }}>1.2M patients annually</strong>. Aging on-premise infrastructure has created mounting reliability, compliance, and cost challenges — driving this AWS cloud migration initiative.
+      </div>
 
       <Card style={{ background:C.navy, border:"none", marginBottom:20 }}>
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:24 }}>
           <div>
             <div style={{ color:"rgba(255,255,255,0.5)", fontSize:10, textTransform:"uppercase", letterSpacing:2, marginBottom:8 }}>Purpose</div>
             <div style={{ color:C.white, fontSize:15, lineHeight:1.7 }}>
-              Modernize VitalCore's aging on-premise infrastructure across 8 hospitals by migrating to AWS —
+              Modernize Crimson3 Vitals's aging on-premise infrastructure across 8 hospitals by migrating to AWS —
               enabling real-time patient analytics, HIPAA compliance automation, and enterprise-grade uptime for critical clinical systems.
             </div>
           </div>
@@ -231,7 +238,7 @@ function ExecutiveSummary() {
         <Card>
           <ST>Board-Level Narrative & Recommended Actions</ST>
           <p style={{ color:C.textMid, fontSize:15, lineHeight:1.7 }}>
-            VitalCore's AWS migration presents a compelling strategic case. The simulation confirms a positive 5-year NPV
+            Crimson3 Vitals's AWS migration presents a compelling strategic case. The simulation confirms a positive 5-year NPV
             with payback by Year 3, driven primarily by downtime reduction and compliance savings across 8 hospital facilities.
             HIPAA compliance at 87% requires immediate remediation before go-live to meet the 95% audit threshold.
           </p>
@@ -367,7 +374,7 @@ function FinancialDashboard() {
           </table>
         </div>
       </Card>
-      <Insight text={`VitalCore's AWS migration requires $${(capex/1e3).toFixed(0)}K upfront. At ${savings}% cloud savings, payback is ${payback.toFixed(1)} years with a 5-year NPV of $${(npv/1e3).toFixed(0)}K — ${npv>0?"a compelling investment case":"requiring cost optimization to justify"}.`} />
+      <Insight text={`Crimson3 Vitals's AWS migration requires $${(capex/1e3).toFixed(0)}K upfront. At ${savings}% cloud savings, payback is ${payback.toFixed(1)} years with a 5-year NPV of $${(npv/1e3).toFixed(0)}K — ${npv>0?"a compelling investment case":"requiring cost optimization to justify"}.`} />
     </div>
   );
 }
@@ -499,7 +506,7 @@ function ValueRealization() {
         </Card>
       </div>
 
-      <Insight text={`VitalCore's migration generates $${(total/1e3).toFixed(0)}K in total value. The largest driver is ${dv>pv?"downtime reduction":"productivity gains"}, reflecting critical hospital uptime requirements.`} />
+      <Insight text={`Crimson3 Vitals's migration generates $${(total/1e3).toFixed(0)}K in total value. The largest driver is ${dv>pv?"downtime reduction":"productivity gains"}, reflecting critical hospital uptime requirements.`} />
     </div>
   );
 }
@@ -550,7 +557,7 @@ function CloudGovernance() {
                 <PolarGrid stroke={C.border} />
                 <PolarAngleAxis dataKey="subject" tick={TICK} />
                 <PolarRadiusAxis angle={90} domain={[0,100]} tick={{ fill:C.slateLight, fontSize:9 }} />
-                <Radar name="VitalCore" dataKey="A" stroke={C.accent} fill={C.accent} fillOpacity={0.15} strokeWidth={2} />
+                <Radar name="Crimson3 Vitals" dataKey="A" stroke={C.accent} fill={C.accent} fillOpacity={0.15} strokeWidth={2} />
               </RadarChart>
             </ResponsiveContainer>
           </Card>
@@ -588,7 +595,7 @@ function CloudGovernance() {
           </Card>
         </div>
       </div>
-      <Insight text={`VitalCore's governance maturity score of ${maturity}% reflects ${af} open audit findings. HIPAA compliance at ${cs}% ${cs>=95?"meets the 95% audit target":"is below the 95% audit target — immediate remediation recommended"}.`} />
+      <Insight text={`Crimson3 Vitals's governance maturity score of ${maturity}% reflects ${af} open audit findings. HIPAA compliance at ${cs}% ${cs>=95?"meets the 95% audit target":"is below the 95% audit target — immediate remediation recommended"}.`} />
     </div>
   );
 }
@@ -668,7 +675,7 @@ function DecisionRights() {
           </div>
         </Card>
       </div>
-      <Insight text={`VitalCore uses a ${selected} decision workflow with ${workflows[selected].length} approval gates. Critical HIPAA systems require ${escalation}h escalation windows with a ${uptime}% uptime SLA.`} />
+      <Insight text={`Crimson3 Vitals uses a ${selected} decision workflow with ${workflows[selected].length} approval gates. Critical HIPAA systems require ${escalation}h escalation windows with a ${uptime}% uptime SLA.`} />
     </div>
   );
 }
@@ -773,7 +780,7 @@ function DevOpsSimulator() {
           </div>
         </div>
       </Card>
-      <Insight text={`At ${automation}% automation with ${teamSize} engineers, VitalCore achieves ${doraLevel} DORA performance — ${deployFreq} deploys/month with ${failureRate}% failure rate. ${automation>70?"Automation above 70% drives 50% higher deploy frequency and 40% fewer failures.":"Increasing automation above 70% is recommended to reach Elite DORA performance."}`} />
+      <Insight text={`At ${automation}% automation with ${teamSize} engineers, Crimson3 Vitals achieves ${doraLevel} DORA performance — ${deployFreq} deploys/month with ${failureRate}% failure rate. ${automation>70?"Automation above 70% drives 50% higher deploy frequency and 40% fewer failures.":"Increasing automation above 70% is recommended to reach Elite DORA performance."}`} />
     </div>
   );
 }
@@ -946,7 +953,7 @@ function AIInvestment() {
           </Card>
         </div>
       </div>
-      <Insight text={`At $${inv}K AI investment with ${dq}% data quality, VitalCore achieves ${(roi*100).toFixed(0)}% projected ROI. ${inv>400?"Returns are plateauing — prioritize data quality over additional spend.":"Increasing data quality above 80% is the highest-leverage action."}`} />
+      <Insight text={`At $${inv}K AI investment with ${dq}% data quality, Crimson3 Vitals achieves ${(roi*100).toFixed(0)}% projected ROI. ${inv>400?"Returns are plateauing — prioritize data quality over additional spend.":"Increasing data quality above 80% is the highest-leverage action."}`} />
     </div>
   );
 }
@@ -1032,7 +1039,7 @@ function OrgAdoption() {
           </div>
         </div>
       </div>
-      <Insight text={`With ${training}h training and ${leadership}% leadership engagement, VitalCore projects ${adoptionPeak.toFixed(0)}% peak adoption over 24 months. ${training>=30&&leadership>=70?"Training 30h+ with leadership >70% drives 80% adoption within 6 months.":"Increasing training and leadership engagement is the highest-leverage intervention."}`} />
+      <Insight text={`With ${training}h training and ${leadership}% leadership engagement, Crimson3 Vitals projects ${adoptionPeak.toFixed(0)}% peak adoption over 24 months. ${training>=30&&leadership>=70?"Training 30h+ with leadership >70% drives 80% adoption within 6 months.":"Increasing training and leadership engagement is the highest-leverage intervention."}`} />
     </div>
   );
 }
@@ -1133,7 +1140,7 @@ function MarketDiffusion() {
           </Card>
         </div>
       </div>
-      <Insight text={`In a ${marketType} market of ${marketSize} organizations, VitalCore achieves ${fin.penetration}% penetration over 36 months. ${networkEffect>0.6?"Strong network effects (>0.6) accelerate adoption dramatically.":"Increasing network effect above 0.6 is the key growth lever."} LTV:CAC of ${(diffusion[3].ltv/diffusion[3].cac).toFixed(1)}x ${diffusion[3].ltv/diffusion[3].cac>3?"signals healthy unit economics.":"needs improvement — target above 3x."}`} />
+      <Insight text={`In a ${marketType} market of ${marketSize} organizations, Crimson3 Vitals achieves ${fin.penetration}% penetration over 36 months. ${networkEffect>0.6?"Strong network effects (>0.6) accelerate adoption dramatically.":"Increasing network effect above 0.6 is the key growth lever."} LTV:CAC of ${(diffusion[3].ltv/diffusion[3].cac).toFixed(1)}x ${diffusion[3].ltv/diffusion[3].cac>3?"signals healthy unit economics.":"needs improvement — target above 3x."}`} />
     </div>
   );
 }
@@ -1243,7 +1250,7 @@ function CostManagement() {
           </Card>
         </div>
       </div>
-      <Insight text={`VitalCore's top ${topN} AWS services cost $${(totalSpend/1e3).toFixed(1)}K/${granularity==="Monthly"?"month":"day"}. Top-3 concentration is ${top3.toFixed(0)}% — ${top3>70?"high concentration risk":"healthy spread"}. ${costReduction>0?`Applying a ${costReduction}% FinOps policy projects $${(totalSavings/1e3).toFixed(1)}K in savings.`:"Use the FinOps Policy lever to simulate cost-reduction scenarios."}`} />
+      <Insight text={`Crimson3 Vitals's top ${topN} AWS services cost $${(totalSpend/1e3).toFixed(1)}K/${granularity==="Monthly"?"month":"day"}. Top-3 concentration is ${top3.toFixed(0)}% — ${top3>70?"high concentration risk":"healthy spread"}. ${costReduction>0?`Applying a ${costReduction}% FinOps policy projects $${(totalSavings/1e3).toFixed(1)}K in savings.`:"Use the FinOps Policy lever to simulate cost-reduction scenarios."}`} />
     </div>
   );
 }
@@ -1422,7 +1429,7 @@ function LoginScreen({ onLogin }) {
         <div style={{ textAlign:"center", marginBottom:36 }}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginBottom:8 }}>
             <div style={{ width:10, height:10, borderRadius:"50%", background:"#34D399", boxShadow:"0 0 8px #34D399" }} />
-            <span style={{ color:C.white, fontWeight:700, fontSize:22, letterSpacing:0.5 }}>VitalCore Health</span>
+            <span style={{ color:C.white, fontWeight:700, fontSize:22, letterSpacing:0.5 }}>Crimson3 Vitals</span>
           </div>
           <div style={{ color:"rgba(255,255,255,0.45)", fontSize:13 }}>AWS Cloud Migration Simulator</div>
         </div>
@@ -1542,7 +1549,7 @@ export default function App() {
       <div style={{ padding:"10px 20px", borderBottom:`1px solid ${C.border}`, display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0, background:C.navy, boxShadow:C.shadowMd }}>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
           <div style={{ width:8, height:8, borderRadius:"50%", background:"#34D399", boxShadow:"0 0 6px #34D399" }} />
-          <span style={{ color:C.white, fontWeight:700, fontSize:15, letterSpacing:0.5 }}>VitalCore Health</span>
+          <span style={{ color:C.white, fontWeight:700, fontSize:15, letterSpacing:0.5 }}>Crimson3 Vitals</span>
           <span style={{ color:"rgba(255,255,255,0.4)", fontSize:13 }}>AWS Cloud Migration Simulator</span>
         </div>
         <button onClick={handleLogout} style={{ background:"rgba(255,255,255,0.08)", border:"1px solid rgba(255,255,255,0.15)", borderRadius:8, padding:"6px 14px", color:"rgba(255,255,255,0.7)", fontWeight:600, cursor:"pointer", fontSize:12 }}>
