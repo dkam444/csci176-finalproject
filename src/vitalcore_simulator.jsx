@@ -34,13 +34,13 @@ const C = {
 
 const NAV = [
   { label:"Executive Summary", icon:"🏛", subTabs:["Overview"] },
-  { label:"Financial", icon:"💰", subTabs:["Executive Financial Dashboard","Value Realization"] },
-  { label:"Governance", icon:"🛡", subTabs:["Cloud Governance","Decision Rights"] },
-  { label:"Operations", icon:"⚙️", subTabs:["DevOps & Implementation","Resilience & Availability"] },
-  { label:"Innovation", icon:"🤖", subTabs:["AI Investment Explorer"] },
-  { label:"Adoption", icon:"📈", subTabs:["Org Adoption","Market Diffusion"] },
-  { label:"Cost Management", icon:"☁️", subTabs:["Cloud Cost Management"], badge:"EC" },
-  { label:"About & Deployment", icon:"🚀", subTabs:["AWS Deployment Info"], badge:"EC2" },
+  { label:"Financial", icon:"💰", subTabs:["P1 · Executive Financial Dashboard","P2 · Value Realization"] },
+  { label:"Governance", icon:"🛡", subTabs:["P3 · Cloud Governance","P4 · Decision Rights & Operating Model"] },
+  { label:"Operations", icon:"⚙️", subTabs:["P5 · DevOps & Implementation Simulator","P6 · Resilience & Availability"] },
+  { label:"Innovation", icon:"🤖", subTabs:["P7 · AI Investment Explorer"] },
+  { label:"Adoption", icon:"📈", subTabs:["P8 · Organizational Adoption Dashboard","P9 · Product Diffusion & Market Expansion"] },
+  { label:"Cost Management", icon:"☁️", subTabs:["EC1 · Cloud Cost Management"], badge:"EC" },
+  { label:"About & Deployment", icon:"🚀", subTabs:["EC2 · AWS Deployment Info"], badge:"EC2" },
 ];
 
 const TT = { background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, boxShadow:C.shadowMd, color:C.text, fontSize:12 };
@@ -133,7 +133,7 @@ function SubTabBar({ tabs, active, onChange }) {
 function ExecutiveSummary() {
   return (
     <div>
-      <PH title="VitalCore Health — AWS Cloud Migration" subtitle="Executive Board Briefing · June 2026" />
+      <PH title="VitalCore Health — AWS Cloud Migration" subtitle="Executive Board Briefing" />
 
       <Card style={{ background:C.navy, border:"none", marginBottom:20 }}>
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:24 }}>
@@ -147,7 +147,7 @@ function ExecutiveSummary() {
           <div>
             <div style={{ color:"rgba(255,255,255,0.5)", fontSize:10, textTransform:"uppercase", letterSpacing:2, marginBottom:8 }}>Stakeholders</div>
             {["CIO — Migration sponsor & architecture","CFO — Budget & ROI oversight","Compliance Officer — HIPAA & SOC 2","Data Scientists — Analytics platform","Operations Team — Uptime & SLAs","Clinical Staff — End-user adoption"].map((s, i) => (
-              <div key={i} style={{ color:C.white, fontSize:14, marginBottom:6, display:"flex", gap:8, alignItems:"center" }}>
+              <div key={i} style={{ color:C.white, fontSize:14, marginBottom:6, display:"flex", gap:8, alignItems:"center", justifyContent:"center" }}>
                 <div style={{ width:5, height:5, borderRadius:"50%", background:"#60A5FA", flexShrink:0 }} />
                 {s}
               </div>
@@ -173,6 +173,35 @@ function ExecutiveSummary() {
         <KPI label="Uptime" value="99.9%" color={C.green} sub="Redundancy L3" />
         <KPI label="Peak Adoption" value="76%" color={C.accent} sub="24-month projection" />
       </div>
+
+      <Card style={{ marginBottom:14 }}>
+          <ST>Capstone Portfolio — Apps Created & Integration</ST>
+          <div style={{ marginBottom:12 }}>
+            {[
+              { n:"P1", label:"Executive Financial Dashboard", desc:"5-year TCO, NPV, ROI, and cash flow model with adjustable CapEx, OpEx, discount rate, and cloud savings assumptions." },
+              { n:"P2", label:"Value Realization Dashboard", desc:"Quantifies tangible and intangible migration benefits — productivity, downtime, compliance, and CSAT — with waterfall and ROI trend charts." },
+              { n:"P3", label:"Cloud Governance Dashboard", desc:"Board-level governance structure with 5-node org hierarchy, security controls radar, and compliance KPI tracking." },
+              { n:"P4", label:"Decision Rights & Operating Model", desc:"Interactive flowchart for Strategic, Budget, Security, and Operational approval workflows with SLA targets." },
+              { n:"P5", label:"DevOps & Implementation Simulator", desc:"DORA performance simulator (deploy frequency, failure rate, lead time, MTTR) plus a 4-phase migration roadmap with milestones and ownership." },
+              { n:"P6", label:"Resilience & Availability Dashboard", desc:"Cloud resilience simulator with uptime/cost curves, risk heatmap, and availability scorecard driven by redundancy, regions, RTO, and RPO." },
+              { n:"P7", label:"AI Investment Explorer", desc:"ROI and marginal return curves showing diminishing returns on AI spend, with data quality and adoption rate as shape-changing inputs." },
+              { n:"P8", label:"Organizational Adoption Dashboard", desc:"S-curve adoption simulator driven by training hours, leadership engagement, and communication effectiveness, with resistance index and readiness score." },
+              { n:"P9", label:"Product Diffusion & Market Expansion", desc:"Bass diffusion model projecting customer growth, market penetration, and CAC vs LTV across B2B/B2C markets with network effect inputs." },
+            ].map(p => (
+              <div key={p.n} style={{ display:"flex", gap:10, padding:"7px 0", borderBottom:`1px solid ${C.border}`, alignItems:"flex-start" }}>
+                <span style={{ background:C.accentSoft, color:C.accent, fontSize:10, fontWeight:700, padding:"2px 7px", borderRadius:20, flexShrink:0, marginTop:1 }}>{p.n}</span>
+                <div>
+                  <span style={{ color:C.text, fontSize:13, fontWeight:600 }}>{p.label} — </span>
+                  <span style={{ color:C.slate, fontSize:12 }}>{p.desc}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ display:"flex", gap:8, alignItems:"flex-start", marginTop:12, padding:"10px 14px", background:C.surfaceAlt, borderRadius:8, border:`1px solid ${C.border}` }}>
+            <div style={{ width:5, height:5, borderRadius:"50%", background:C.teal, flexShrink:0, marginTop:5 }} />
+            <span style={{ color:C.textMid, fontSize:12, lineHeight:1.6 }}>All 9 panels (+ 2 extra credit) are integrated into a single React application with tab-based navigation and a unified design system — deployed via AWS Amplify Hosting (CloudFront + S3) with AWS Cognito for authentication.</span>
+          </div>
+        </Card>
 
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
         <Card>
@@ -527,16 +556,35 @@ function CloudGovernance() {
           </Card>
           <Card>
             <ST>Governance Org Structure</ST>
-            {[
-              { label:"Executive Board", resp:"Strategic oversight & risk appetite" },
-              { label:"Cloud Steering Committee", resp:"Architecture & vendor governance" },
-              { label:"Security Office · Compliance · Operations", resp:"IAM/encryption · HIPAA/SOC 2 · Uptime/SLAs" },
-            ].map((n, i) => (
-              <div key={i} style={{ background:C.surfaceAlt, border:`1px solid ${C.border}`, borderRadius:8, padding:"8px 14px", marginLeft:i*14, marginBottom:6 }}>
-                <div style={{ color:C.accent, fontSize:12, fontWeight:700 }}>{n.label}</div>
-                <div style={{ color:C.slate, fontSize:11 }}>{n.resp}</div>
-              </div>
-            ))}
+            {/* Tier 1 */}
+            <div style={{ background:C.accentSoft, border:`1px solid #BFDBFE`, borderRadius:8, padding:"8px 14px", marginBottom:6, textAlign:"center" }}>
+              <div style={{ color:C.accent, fontSize:12, fontWeight:700 }}>Executive Board</div>
+              <div style={{ color:C.slate, fontSize:11 }}>Strategic oversight & risk appetite</div>
+            </div>
+            <div style={{ display:"flex", justifyContent:"center", marginBottom:2 }}>
+              <div style={{ width:1, height:10, background:C.border }} />
+            </div>
+            {/* Tier 2 */}
+            <div style={{ background:C.tealSoft, border:`1px solid ${C.teal}40`, borderRadius:8, padding:"8px 14px", marginBottom:6, marginLeft:14, marginRight:14, textAlign:"center" }}>
+              <div style={{ color:C.teal, fontSize:12, fontWeight:700 }}>Cloud Steering Committee</div>
+              <div style={{ color:C.slate, fontSize:11 }}>Architecture decisions & vendor governance</div>
+            </div>
+            <div style={{ display:"flex", justifyContent:"center", marginBottom:4 }}>
+              <div style={{ width:1, height:10, background:C.border }} />
+            </div>
+            {/* Tier 3 — 3 nodes */}
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:6 }}>
+              {[
+                { label:"Security Office", resp:"IAM policies & AES-256 encryption", color:C.red, soft:C.redSoft },
+                { label:"Compliance Team", resp:"HIPAA & SOC 2 audit management", color:C.green, soft:C.greenSoft },
+                { label:"Operations Team", resp:"Uptime SLAs & incident response", color:C.amber, soft:C.amberSoft },
+              ].map(n => (
+                <div key={n.label} style={{ background:n.soft, border:`1px solid ${n.color}40`, borderRadius:8, padding:"8px 10px" }}>
+                  <div style={{ color:n.color, fontSize:11, fontWeight:700 }}>{n.label}</div>
+                  <div style={{ color:C.slate, fontSize:10, marginTop:2 }}>{n.resp}</div>
+                </div>
+              ))}
+            </div>
           </Card>
         </div>
       </div>
@@ -571,18 +619,33 @@ function DecisionRights() {
       </div>
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
         <Card>
-          <ST>Decision Approval Workflow</ST>
-          <div style={{ display:"flex", gap:6, marginBottom:14, flexWrap:"wrap" }}>
+          <ST>Decision Approval Flowchart</ST>
+          <div style={{ display:"flex", gap:6, marginBottom:16, flexWrap:"wrap" }}>
             {Object.keys(workflows).map(k => (
               <button key={k} onClick={() => setSelected(k)} style={{ padding:"5px 12px", borderRadius:20, border:`1px solid ${selected===k?C.accent:C.border}`, cursor:"pointer", background:selected===k?C.accent:C.surface, color:selected===k?C.white:C.textMid, fontSize:12, fontWeight:600 }}>{k}</button>
             ))}
           </div>
-          {workflows[selected].map((step, i) => (
-            <div key={i} style={{ display:"flex", alignItems:"flex-start", gap:10, marginBottom:10 }}>
-              <div style={{ width:22, height:22, borderRadius:"50%", background:C.accentSoft, color:C.accent, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, flexShrink:0, border:`1px solid #BFDBFE` }}>{i+1}</div>
-              <div style={{ color:C.textMid, fontSize:13, paddingTop:2 }}>{step}</div>
-            </div>
-          ))}
+          <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:0 }}>
+            {workflows[selected].map((step, i) => {
+              const isLast = i === workflows[selected].length - 1;
+              const colors = [C.accent, C.teal, C.amber, C.green, C.red];
+              const c = colors[i % colors.length];
+              return (
+                <div key={i} style={{ display:"flex", flexDirection:"column", alignItems:"center", width:"100%" }}>
+                  <div style={{ width:"100%", background:C.surfaceAlt, border:`1px solid ${c}60`, borderRadius:8, padding:"9px 14px", display:"flex", alignItems:"center", gap:10 }}>
+                    <div style={{ width:22, height:22, borderRadius:4, background:c, color:C.white, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, flexShrink:0 }}>{i+1}</div>
+                    <div style={{ color:C.text, fontSize:13 }}>{step}</div>
+                  </div>
+                  {!isLast && (
+                    <div style={{ display:"flex", flexDirection:"column", alignItems:"center", margin:"2px 0" }}>
+                      <div style={{ width:1, height:8, background:C.border }} />
+                      <div style={{ width:0, height:0, borderLeft:"5px solid transparent", borderRight:"5px solid transparent", borderTop:`6px solid ${C.border}` }} />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </Card>
         <Card>
           <ST>SLA Dashboard</ST>
@@ -684,6 +747,32 @@ function DevOpsSimulator() {
           </Card>
         </div>
       </div>
+      <Card style={{ marginTop:14 }}>
+        <ST>Migration Implementation Roadmap</ST>
+        <div style={{ overflowX:"auto" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:10, minWidth:480 }}>
+            {[
+              { phase:"1 — Assess", duration:"Weeks 1–4", owner:"CIO + Architects", milestones:["Inventory all on-prem workloads","Define migration wave plan","Baseline TCO & risk register"], status:"Complete", color:C.green },
+              { phase:"2 — Pilot", duration:"Weeks 5–10", owner:"DevOps + Security", milestones:["Migrate 1 non-critical app","Stand up CI/CD pipeline","Validate IAM & encryption"], status:"Complete", color:C.green },
+              { phase:"3 — Migrate", duration:"Weeks 11–24", owner:"Engineering Teams", milestones:["Wave-by-wave hospital migration","EHR & clinical systems cutover","Staff training & change mgmt"], status:"In Progress", color:C.amber },
+              { phase:"4 — Optimize", duration:"Weeks 25–36", owner:"FinOps + Ops", milestones:["Cost optimization & Reserved Instances","Elite DORA performance target","Full resilience & HA validation"], status:"Planned", color:C.accent },
+            ].map(p => (
+              <div key={p.phase} style={{ background:C.surfaceAlt, border:`1px solid ${p.color}40`, borderRadius:10, padding:"12px 14px" }}>
+                <div style={{ color:p.color, fontSize:12, fontWeight:700, marginBottom:2 }}>{p.phase}</div>
+                <div style={{ color:C.slate, fontSize:11, marginBottom:4 }}>{p.duration}</div>
+                <div style={{ background:p.color === C.green ? C.greenSoft : p.color === C.amber ? C.amberSoft : C.accentSoft, color:p.color, fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:20, display:"inline-block", marginBottom:8 }}>{p.status}</div>
+                <div style={{ color:C.slate, fontSize:10, marginBottom:6 }}>Owner: {p.owner}</div>
+                {p.milestones.map((m, i) => (
+                  <div key={i} style={{ display:"flex", gap:6, alignItems:"flex-start", marginBottom:4 }}>
+                    <div style={{ width:5, height:5, borderRadius:"50%", background:p.color, flexShrink:0, marginTop:4 }} />
+                    <span style={{ color:C.textMid, fontSize:11 }}>{m}</span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </Card>
       <Insight text={`At ${automation}% automation with ${teamSize} engineers, VitalCore achieves ${doraLevel} DORA performance — ${deployFreq} deploys/month with ${failureRate}% failure rate. ${automation>70?"Automation above 70% drives 50% higher deploy frequency and 40% fewer failures.":"Increasing automation above 70% is recommended to reach Elite DORA performance."}`} />
     </div>
   );
@@ -702,7 +791,7 @@ function ResilienceDashboard() {
   const uptimeCurve = [1,2,3,4,5,6].map(r => ({
     redundancy:`R${r}`,
     uptime: Math.min(99.999, 99+r*0.3+regions*0.2),
-    cost: (r*8000+regions*12000)/1000,
+    cost: (r*8000 + regions*12000 + Math.max(0, 4-rto)*2500 + Math.max(0, 2-rpo)*1500)/1000,
   }));
   const heatmap = [
     { risk:"Data Loss", likelihood:rpo>2?"High":"Low", score:rpo>2?9:2 },
@@ -794,11 +883,17 @@ function AIInvestment() {
   const roi = (inv>400?0.8:inv>200?1.2:1.0) * (dq/100) * (ar/100) * 2.5;
   const marginal = Math.max(0, 3-(inv/200));
   const efficiency = Math.min(100, (dq*0.5)+(ar*0.3)+(Math.min(inv,300)/300*20));
-  const curve = [0,50,100,150,200,250,300,350,400,500].map(i => ({
-    investment:`$${i}K`,
-    roi: ((i>400?0.8:i>200?1.2:1.0)*(dq/100)*(ar/100)*2.5*(i/300)*100).toFixed(0),
-    marginal: Math.max(0, 3-(i/200)).toFixed(2),
-  }));
+  const maxInv = Math.max(500, inv * 1.5);
+  const inflection = (dq / 100) * maxInv * 0.6;
+  const curve = Array.from({ length: 10 }, (_, j) => {
+    const i = Math.round((j / 9) * maxInv / 10) * 10;
+    const roiMult = i > inflection * 1.5 ? 0.8 : i > inflection * 0.6 ? 1.2 : 1.0;
+    return {
+      investment: `$${i}K`,
+      roi: (roiMult * (dq/100) * (ar/100) * 2.5 * (i / (inv || 300)) * 100).toFixed(0),
+      marginal: Math.max(0, 3 - (i / (inflection * 0.7))).toFixed(2),
+    };
+  });
 
   return (
     <div>
@@ -1002,6 +1097,24 @@ function MarketDiffusion() {
                 <Tooltip contentStyle={TT} />
                 <Area type="monotone" dataKey="customers" stroke={C.accent} fill={C.accentSoft} name="Customers" strokeWidth={2} />
               </AreaChart>
+            </ResponsiveContainer>
+          </Card>
+          <Card>
+            <ST>Customer Growth Forecast (Annual)</ST>
+            <ResponsiveContainer width="100%" height={155}>
+              <BarChart data={[1,2,3].map(yr => {
+                const d = diffusion.find(p => p.month === `M${yr*12}`) || diffusion[diffusion.length-1];
+                return { year:`Year ${yr}`, customers: d.customers, penetration: d.penetration };
+              })}>
+                <CartesianGrid {...GRID} />
+                <XAxis dataKey="year" tick={TICK} />
+                <YAxis yAxisId="left" tick={TICK} />
+                <YAxis yAxisId="right" orientation="right" tick={TICK} tickFormatter={v=>`${v}%`} />
+                <Tooltip contentStyle={TT} />
+                <Legend wrapperStyle={{ color:C.slate, fontSize:11 }} />
+                <Bar yAxisId="left" dataKey="customers" name="Customers" fill={C.accent} radius={[4,4,0,0]} fillOpacity={0.85} />
+                <Bar yAxisId="right" dataKey="penetration" name="Penetration %" fill={C.teal} radius={[4,4,0,0]} fillOpacity={0.7} />
+              </BarChart>
             </ResponsiveContainer>
           </Card>
           <Card>
@@ -1431,7 +1544,6 @@ export default function App() {
           <div style={{ width:8, height:8, borderRadius:"50%", background:"#34D399", boxShadow:"0 0 6px #34D399" }} />
           <span style={{ color:C.white, fontWeight:700, fontSize:15, letterSpacing:0.5 }}>VitalCore Health</span>
           <span style={{ color:"rgba(255,255,255,0.4)", fontSize:13 }}>AWS Cloud Migration Simulator</span>
-          <span style={{ background:"rgba(52,211,153,0.15)", color:"#34D399", fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:20 }}>LIVE</span>
         </div>
         <button onClick={handleLogout} style={{ background:"rgba(255,255,255,0.08)", border:"1px solid rgba(255,255,255,0.15)", borderRadius:8, padding:"6px 14px", color:"rgba(255,255,255,0.7)", fontWeight:600, cursor:"pointer", fontSize:12 }}>
           Log Out
