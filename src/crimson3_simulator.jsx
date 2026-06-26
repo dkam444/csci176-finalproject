@@ -1303,9 +1303,9 @@ function AboutDeployment() {
           ))}
           <div style={{ marginTop:16 }}>
             <ST>GitHub Repository</ST>
-            <a href="https://github.com/dkam4/CSCI176-Final-Project" target="_blank" rel="noreferrer"
+            <a href="https://github.com/dkam444/csci176-finalproject" target="_blank" rel="noreferrer"
               style={{ color:C.accent, fontSize:13, fontWeight:600, wordBreak:"break-all" }}>
-              github.com/dkam4/CSCI176-Final-Project
+              github.com/dkam444/csci176-finalproject
             </a>
           </div>
         </Card>
