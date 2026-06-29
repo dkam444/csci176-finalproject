@@ -1357,6 +1357,28 @@ function AboutDeployment() {
       </div>
 
       <Insight text="All AWS resources for this project operate within the free tier or under $25/month. Enable AWS Budgets with a $10 alert threshold to prevent unexpected charges. Deleting the Amplify app and Cognito user pool removes all billable infrastructure immediately." />
+
+      <Card style={{ marginTop:16 }}>
+        <ST>Data Sources &amp; Methodology</ST>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"8px 24px", marginTop:8 }}>
+          {[
+            { label:"Gartner Cloud Migration Cost Benchmarks", year:"2024" },
+            { label:"AWS Healthcare Industry Report", year:null },
+            { label:"DORA State of DevOps Report", year:"2024" },
+            { label:"Bass Diffusion Model — Bass, F.M.", year:"1969" },
+            { label:"NIST SP 800-160 (FAIR Risk Framework)", year:null },
+            { label:"Healthcare Sector WACC — Damodaran Online", year:null },
+            { label:"HIPAA Compliance Framework — HHS.gov", year:null },
+          ].map((src, i) => (
+            <div key={i} style={{ display:"flex", alignItems:"baseline", gap:8, padding:"7px 0", borderBottom:`1px solid ${C.border}` }}>
+              <span style={{ color:C.accent, fontSize:12, flexShrink:0 }}>•</span>
+              <span style={{ color:C.textMid, fontSize:13, lineHeight:1.5 }}>
+                {src.label}{src.year ? <span style={{ color:C.slate }}> ({src.year})</span> : null}
+              </span>
+            </div>
+          ))}
+        </div>
+      </Card>
     </div>
   );
 }
