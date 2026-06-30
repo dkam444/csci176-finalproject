@@ -26,6 +26,6 @@ CSCI S-176 Advanced Cloud Technology Management · Harvard Summer School 2026
 
 
 ## Built With
-React, Recharts, Claude API (claude-sonnet-4-6)
+React, Recharts, Claude Code.
 
 - This project was implemented in React/Vite rather than Streamlit. React was selected to provide a richer, more responsive interactive dashboard while fulfilling the same functional requirements outlined in the assignment.
