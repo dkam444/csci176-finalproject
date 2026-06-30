@@ -116,6 +116,30 @@ function Insight({ text }) {
   );
 }
 
+function OGSMStrip({ o, g, s, m }) {
+  const items = [
+    { letter:"O", label:"Objective",  text:o, color:C.accent },
+    { letter:"G", label:"Goals",      text:g, color:C.teal },
+    { letter:"S", label:"Strategies", text:s, color:C.green },
+    { letter:"M", label:"Monitoring", text:m, color:C.amber },
+  ];
+  return (
+    <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:8, marginBottom:18 }}>
+      {items.map(item => (
+        <div key={item.letter} style={{ background:C.surfaceAlt, border:`1px solid ${C.border}`, borderRadius:8, padding:"10px 12px", borderTop:`3px solid ${item.color}` }}>
+          <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:5 }}>
+            <div style={{ width:18, height:18, borderRadius:4, background:item.color, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+              <span style={{ color:"white", fontSize:10, fontWeight:800 }}>{item.letter}</span>
+            </div>
+            <span style={{ fontSize:10, fontWeight:700, color:item.color, textTransform:"uppercase", letterSpacing:0.8 }}>{item.label}</span>
+          </div>
+          <div style={{ fontSize:12, color:C.textMid, lineHeight:1.5 }}>{item.text}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function PH({ title, subtitle }) {
   return (
     <div style={{ marginBottom:20, paddingBottom:16, borderBottom:`1px solid ${C.border}` }}>
@@ -223,21 +247,32 @@ function ExecutiveSummary() {
           <p style={{ color:C.textMid, fontSize:14, lineHeight:1.75, textAlign:"left" }}>
             Crimson3 Vitals's AWS migration presents a compelling strategic case. The simulation confirms a positive 5-year NPV with payback by Year 3, driven primarily by downtime reduction and compliance savings across 8 hospital facilities. Three priority actions — HIPAA remediation, DevOps automation, and leadership engagement — are critical to achieving projected outcomes on schedule.
           </p>
-          <ST>Top 3 Recommended Actions</ST>
           <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, marginTop:8 }}>
             {[
-              { n:"1", priority:"Critical", action:"Remediate HIPAA Compliance", detail:"Prioritize IAM policy audits and incident response to reach the 95% audit score before go-live.", color:C.red, metric:"Audit Score", current:87, target:95 },
-              { n:"2", priority:"High",     action:"Push Automation Above 70%",  detail:"Crossing 70% automation unlocks Elite DORA performance and reduces deployment failures by 40%.", color:C.amber, metric:"Automation", current:65, target:70 },
-              { n:"3", priority:"High",     action:"Invest in Leadership Engagement", detail:"Leadership engagement is the top adoption risk. A structured change program drives 80% adoption in 6 months.", color:C.accent, metric:"Engagement", current:60, target:70 },
+              { priority:"Critical", action:"Remediate HIPAA Compliance", detail:"Prioritize IAM policy audits and incident response to reach the 95% audit score before go-live.", color:C.red, metric:"Audit Score", current:87, target:95,
+                o:"Close the gap between current 87% compliance and the 95% audit threshold required for go-live",
+                g:"Reach 95% compliance score with zero open audit findings before go-live",
+                s:"IAM policy audits, AES-256 encryption across all data stores, incident response procedures, resolve each audit finding individually",
+                m:"Quarterly compliance audits; policy exceptions and findings reviewed monthly" },
+              { priority:"High", action:"Push Automation Above 70%", detail:"Crossing 70% automation unlocks Elite DORA performance and reduces deployment failures by 40%.", color:C.amber, metric:"Automation", current:65, target:70,
+                o:"Move from High to Elite DORA performance by increasing automation past the 70% threshold",
+                g:"Cut change failure rate by ~40% and increase deploy frequency to Elite tier",
+                s:"Build CI/CD pipelines, automate testing and infra provisioning, remove manual deployment approval steps",
+                m:"Deploy frequency and failure rate tracked per release; DORA tier reviewed monthly" },
+              { priority:"High", action:"Invest in Leadership Engagement", detail:"Leadership engagement is the top adoption risk. A structured change program drives 80% adoption in 6 months.", color:C.accent, metric:"Engagement", current:60, target:70,
+                o:"Drive adoption by increasing visible leadership involvement in the migration",
+                g:"Reach 80% staff adoption within 6 months",
+                s:"Leadership participates in training, communicates rationale directly to staff, sets adoption targets, holds regular check-ins",
+                m:"Adoption and resistance index tracked monthly; leadership check-ins held biweekly" },
             ].map(r => (
-              <div key={r.n}
+              <div key={r.action}
                 style={{ borderRadius:10, border:`1px solid ${C.border}`, overflow:"hidden", transition:"transform 0.18s, box-shadow 0.18s", cursor:"default" }}
                 onMouseEnter={e => { e.currentTarget.style.transform="translateY(-3px)"; e.currentTarget.style.boxShadow="0 6px 20px rgba(0,0,0,0.09)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform="translateY(0)"; e.currentTarget.style.boxShadow="none"; }}>
                 <div style={{ height:4, background:r.color }} />
                 <div style={{ padding:"14px 16px" }}>
-                  <div style={{ fontSize:10, fontWeight:700, color:r.color, textTransform:"uppercase", letterSpacing:0.8, marginBottom:6 }}>{r.priority}</div>
-                  <div style={{ color:C.text, fontSize:13, fontWeight:700, lineHeight:1.35, marginBottom:12 }}>{r.action}</div>
+                  <div style={{ fontSize:10, fontWeight:700, color:r.color, textTransform:"uppercase", letterSpacing:0.8, marginBottom:4 }}>{r.priority}</div>
+                  <div style={{ color:C.text, fontSize:14, fontWeight:700, lineHeight:1.35, marginBottom:10 }}>{r.action}</div>
                   <div style={{ marginBottom:10 }}>
                     <div style={{ display:"flex", justifyContent:"space-between", marginBottom:5 }}>
                       <span style={{ color:C.slate, fontSize:11 }}>{r.metric}</span>
@@ -247,7 +282,25 @@ function ExecutiveSummary() {
                       <div style={{ width:`${r.current}%`, height:"100%", background:r.color, borderRadius:3 }} />
                     </div>
                   </div>
-                  <div style={{ color:C.slate, fontSize:12, lineHeight:1.6 }}>{r.detail}</div>
+                  <div style={{ color:C.slate, fontSize:12, lineHeight:1.6, marginBottom:14 }}>{r.detail}</div>
+                  <div style={{ borderTop:`1px solid ${C.border}`, paddingTop:12 }}>
+                    {[
+                      { letter:"O", label:"Objective", text:r.o, color:C.accent },
+                      { letter:"G", label:"Goal",      text:r.g, color:C.teal },
+                      { letter:"S", label:"Strategy",  text:r.s, color:C.green },
+                      { letter:"M", label:"Monitoring",text:r.m, color:C.amber },
+                    ].map(row => (
+                      <div key={row.letter} style={{ marginBottom:9 }}>
+                        <div style={{ display:"flex", alignItems:"center", gap:5, marginBottom:2 }}>
+                          <div style={{ width:16, height:16, borderRadius:3, background:row.color, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                            <span style={{ color:"white", fontSize:9, fontWeight:800 }}>{row.letter}</span>
+                          </div>
+                          <span style={{ fontSize:10, fontWeight:700, color:row.color, textTransform:"uppercase", letterSpacing:0.8 }}>{row.label}</span>
+                        </div>
+                        <div style={{ fontSize:12, color:C.textMid, lineHeight:1.5, paddingLeft:21, textAlign:"left" }}>{row.text}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
@@ -283,6 +336,12 @@ function FinancialDashboard() {
     <div>
       <PH title="Executive Financial Dashboard" subtitle="5-year TCO, NPV, ROI, and cash flow analysis" />
       <Insight text={`Crimson3 Vitals's AWS migration requires $${(capex/1e3).toFixed(0)}K upfront. At ${savings}% cloud savings, payback is ${payback.toFixed(1)} years with a 5-year NPV of $${(npv/1e3).toFixed(0)}K — ${npv>0?"a compelling investment case":"requiring cost optimization to justify"}.`} />
+      <OGSMStrip
+        o="Achieve a financially sustainable AWS migration with positive ROI within 3 years"
+        g="NPV > $0, 5-yr ROI ≥ 40%, payback period < 36 months"
+        s="Shift CapEx to OpEx via Reserved Instances; phase migration to control upfront spend"
+        m="Monthly CFO review; quarterly NPV recalculation; annual TCO benchmark vs on-prem"
+      />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Year-1 CapEx" value={`$${(capex/1e6).toFixed(1)}M`} color={C.amber} />
         <KPI label="Annual OpEx" value={`$${(opex/1e3).toFixed(0)}K`} color={C.accent} />
@@ -398,6 +457,12 @@ function ValueRealization() {
     <div>
       <PH title="Value Realization Dashboard" subtitle="Tangible and intangible benefit analysis" />
       <Insight text={`Crimson3 Vitals's migration generates $${(total/1e3).toFixed(0)}K in total value. The largest driver is ${dv>pv?"downtime reduction":"productivity gains"}, reflecting critical hospital uptime requirements.`} />
+      <OGSMStrip
+        o="Capture full business value of cloud migration across clinical and operational domains"
+        g="Total value ≥ $374K; downtime reduction ≥ 35%; compliance savings ≥ $150K"
+        s="Parallel delivery across productivity, uptime, compliance, and patient CSAT workstreams"
+        m="Monthly value realization review; quarterly benefit audit against projections"
+      />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Productivity Gain" value={`$${(pv/1e3).toFixed(0)}K`} color={C.accent} />
         <KPI label="Downtime Savings" value={`$${(dv/1e3).toFixed(0)}K`} color={C.teal} />
@@ -522,6 +587,12 @@ function CloudGovernance() {
     <div>
       <PH title="Cloud Governance Dashboard" subtitle="Board-level governance structure, compliance KPIs, and security controls" />
       <Insight text={`Crimson3 Vitals's governance maturity score of ${maturity}% reflects ${af} open audit findings. HIPAA compliance at ${cs}% ${cs>=95?"meets the 95% audit target":"is below the 95% audit target — immediate remediation recommended"}.`} />
+      <OGSMStrip
+        o="Establish a compliant, auditable cloud governance framework meeting HIPAA requirements"
+        g="Compliance score ≥ 90; audit findings ≤ 5; governance maturity ≥ Level 4"
+        s="Deploy SCPs, policy guardrails, and automated HIPAA controls via AWS Config"
+        m="Weekly HIPAA compliance check; monthly audit review; quarterly governance maturity assessment"
+      />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Compliance Score" value={`${cs}%`} color={cs>80?C.green:C.amber} />
         <KPI label="Policy Exceptions" value={pe} color={pe<5?C.green:C.red} />
@@ -613,6 +684,12 @@ function DecisionRights() {
     <div>
       <PH title="Decision Rights & Operating Model" subtitle="Approval workflows, SLA targets, and governance operating model" />
       <Insight text={`Crimson3 Vitals uses a ${selected} decision workflow with ${workflows[selected].length} approval gates. Critical HIPAA systems require ${escalation}h escalation windows with a ${uptime}% uptime SLA.`} />
+      <OGSMStrip
+        o="Define clear accountability and escalation paths for cloud operations across all stakeholders"
+        g="Uptime SLA ≥ 99.9%; avg response ≤ 4h; escalation events < 10/month"
+        s="RACI matrix with CTO as governance lead; tiered approval thresholds by risk level"
+        m="Weekly SLA review; monthly escalation trend report; quarterly RACI model refresh"
+      />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Uptime SLA" value={`${uptime}%`} color={sc(uptime,99.9,99.5)} />
         <KPI label="Response Time" value={`${response}ms`} color={sc(500-response,350,200)} />
@@ -697,6 +774,12 @@ function DevOpsSimulator() {
     <div>
       <PH title="DevOps & Implementation Simulator" subtitle="DORA metrics, automation performance, and deployment trends" />
       <Insight text={`At ${automation}% automation with ${teamSize} engineers, Crimson3 Vitals achieves ${doraLevel} DORA performance — ${deployFreq} deploys/month with ${failureRate}% failure rate. ${automation>70?"Automation above 70% drives 50% higher deploy frequency and 40% fewer failures.":"Increasing automation above 70% is recommended to reach Elite DORA performance."}`} />
+      <OGSMStrip
+        o="Achieve elite DORA performance enabling reliable, high-frequency software delivery"
+        g="Deploy frequency ≥ 10/week; change failure rate < 5%; MTTR < 1h"
+        s="CI/CD automation via AWS CodePipeline; IaC with Terraform; canary deployments"
+        m="Daily DORA metrics; weekly sprint retrospective; monthly automation maturity assessment"
+      />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Deploy Frequency" value={`${deployFreq}/mo`} color={C.accent} />
         <KPI label="Change Failure Rate" value={`${failureRate}%`} color={parseFloat(failureRate)<10?C.green:C.red} />
@@ -806,6 +889,12 @@ function ResilienceDashboard() {
     <div>
       <PH title="Resilience & Availability Dashboard" subtitle="Cloud resilience simulation with uptime, cost, and risk heatmap" />
       <Insight text={`Redundancy Level ${redundancy} across ${regions} AWS region${regions>1?"s":""} achieves ${uptime.toFixed(3)}% availability at $${(monthlyCost/1e3).toFixed(0)}K/month. ${redundancy>=4?"Optimal redundancy achieved.":"Level "+(redundancy+1)+" would improve uptime ~0.3% for $8K/mo additional cost."}`} />
+      <OGSMStrip
+        o="Ensure enterprise-grade availability for critical clinical systems with minimal data loss"
+        g="Uptime ≥ 99.9%; RTO ≤ 15 min; RPO ≤ 5 min; monthly cost within budget"
+        s="Multi-AZ architecture; Route 53 failover; automated backup and DR runbooks"
+        m="Real-time availability alerts; weekly risk review; monthly cost-vs-uptime trade-off analysis"
+      />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Availability" value={`${uptime.toFixed(3)}%`} color={uptime>=99.9?C.green:C.amber} />
         <KPI label="Monthly Cost" value={`$${(monthlyCost/1e3).toFixed(0)}K`} color={C.amber} />
@@ -901,6 +990,12 @@ function AIInvestment() {
     <div>
       <PH title="AI Investment Explorer" subtitle="ROI curves, marginal returns, and investment efficiency analysis" />
       <Insight text={`At $${inv}K AI investment with ${dq}% data quality, Crimson3 Vitals achieves ${(roi*100).toFixed(0)}% projected ROI. ${inv>400?"Returns are plateauing — prioritize data quality over additional spend.":"Increasing data quality above 80% is the highest-leverage action."}`} />
+      <OGSMStrip
+        o="Maximize return on AI/ML investment to accelerate clinical analytics capabilities"
+        g="Projected ROI > 150%; marginal return > 1.0 at selected investment level"
+        s="Prioritize high-ROI use cases (readmission risk, staffing) before scaling spend"
+        m="Quarterly AI investment review; semi-annual ROI audit; annual portfolio reallocation decision"
+      />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="AI Investment" value={`$${inv}K`} color={C.accent} />
         <KPI label="Projected ROI" value={`${(roi*100).toFixed(0)}%`} color={roi>1.5?C.green:C.amber} />
@@ -978,6 +1073,12 @@ function OrgAdoption() {
     <div>
       <PH title="Organizational Adoption Dashboard" subtitle="Change management simulation — S-curve, resistance index, and readiness score" />
       <Insight text={`With ${training}h training and ${leadership}% leadership engagement, Crimson3 Vitals projects ${adoptionPeak.toFixed(0)}% peak adoption over 24 months. ${training>=30&&leadership>=70?"Training 30h+ with leadership >70% drives 80% adoption within 6 months.":"Increasing training and leadership engagement is the highest-leverage intervention."}`} />
+      <OGSMStrip
+        o="Drive high-velocity staff adoption of cloud tools across all 8 hospitals"
+        g="Peak adoption ≥ 80% by month 18; resistance index < 30; readiness score ≥ 75"
+        s="Executive sponsorship + role-based training; change champions in each hospital"
+        m="Biweekly training progress check; monthly adoption rate review; quarterly leadership engagement survey"
+      />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Peak Adoption" value={`${adoptionPeak.toFixed(0)}%`} color={adoptionPeak>75?C.green:C.amber} />
         <KPI label="Resistance Index" value={`${resistance.toFixed(0)}%`} color={resistance<25?C.green:C.red} />
@@ -1063,6 +1164,12 @@ function MarketDiffusion() {
     <div>
       <PH title="Product Diffusion & Market Expansion" subtitle="Bass diffusion model — customer growth, CAC vs LTV, and market penetration" />
       <Insight text={`In a ${marketType} market of ${marketSize} organizations, Crimson3 Vitals achieves ${fin.penetration}% penetration over 36 months. ${networkEffect>0.6?"Strong network effects (>0.6) accelerate adoption dramatically.":"Increasing network effect above 0.6 is the key growth lever."} LTV:CAC of ${(diffusion[3].ltv/diffusion[3].cac).toFixed(1)}x ${diffusion[3].ltv/diffusion[3].cac>3?"signals healthy unit economics.":"needs improvement — target above 3x."}`} />
+      <OGSMStrip
+        o="Expand the Crimson3 platform across regional healthcare networks via organic diffusion"
+        g="60% market penetration by month 36; LTV:CAC ≥ 8x; net new adopters ≥ 300"
+        s="Network effect cultivation; referral incentives; B2B partnership agreements"
+        m="Monthly new adopter tracking; quarterly market penetration review; annual LTV:CAC audit"
+      />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Market Size" value={`${marketSize}`} color={C.accent} sub="organizations" />
         <KPI label="3-yr Penetration" value={`${fin.penetration}%`} color={fin.penetration>50?C.green:C.amber} />
@@ -1178,6 +1285,12 @@ function CostManagement() {
     <div>
       <PH title="Cloud Cost Management Panel" subtitle="AWS Cost Explorer simulation — FinOps dashboard with anomaly detection" />
       <Insight text={`Crimson3 Vitals's top ${topN} AWS services cost $${(totalSpend/1e3).toFixed(1)}K/${granularity==="Monthly"?"month":"day"}. Top-3 concentration is ${top3.toFixed(0)}% — ${top3>70?"high concentration risk":"healthy spread"}. ${costReduction>0?`Applying a ${costReduction}% FinOps policy projects $${(totalSavings/1e3).toFixed(1)}K in savings.`:"Use the FinOps Policy lever to simulate cost-reduction scenarios."}`} />
+      <OGSMStrip
+        o="Establish FinOps discipline to optimize AWS spend across all 8 hospital systems"
+        g="Cloud spend reduction ≥ 20%; top-3 concentration < 60%; anomaly response < 48h"
+        s="Reserved Instance purchasing; FinOps policy enforcement; Cost Explorer integration"
+        m="Daily anomaly alerts; weekly spend review; monthly FinOps policy assessment"
+      />
       <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:14 }}>
         <span style={{ background:C.tealSoft, color:C.teal, fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:20 }}>DEMO MODE</span>
         <span style={{ color:C.slate, fontSize:12 }}>Synthetic AWS Cost Explorer data — connect AWS credentials for live data</span>
