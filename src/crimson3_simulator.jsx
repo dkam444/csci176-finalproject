@@ -174,7 +174,7 @@ function ExecutiveSummary() {
       </div>
 
       <div style={{ color:C.textMid, fontSize:14, lineHeight:1.8, marginBottom:16, paddingLeft:2 }}>
-        Crimson3 Vitals is a regional healthcare network operating <strong style={{ color:C.text }}>8 hospitals</strong> and <strong style={{ color:C.text }}>24 clinics</strong> across the northeastern United States, serving <strong style={{ color:C.text }}>1.2M patients annually</strong>. Aging on-premise infrastructure has created mounting reliability, compliance, and cost challenges — driving this AWS cloud migration initiative.
+        Crimson3 Vitals is a regional healthcare network operating <strong style={{ color:C.text }}>8 hospitals</strong> and <strong style={{ color:C.text }}>24 clinics</strong> across the northeastern United States, serving <strong style={{ color:C.text }}>1.2M patients annually</strong>.
       </div>
 
       <Card style={{ background:C.navy, border:"none", marginBottom:20 }}>
