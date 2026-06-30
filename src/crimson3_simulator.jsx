@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
+const NavContext = createContext(null);
 import {
   LineChart, Line, BarChart, Bar, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
@@ -41,6 +42,17 @@ const NAV = [
   { label:"Adoption", icon:"📈", subTabs:["P8 · Organizational Adoption Dashboard","P9 · Product Diffusion & Market Expansion"] },
   { label:"Cost Management", icon:"☁️", subTabs:["EC1 · Cloud Cost Management"], badge:"EC" },
   { label:"About & Deployment", icon:"🚀", subTabs:["EC2 · AWS Deployment Info"], badge:"EC2" },
+];
+
+const SIDEBAR = [
+  { section:"OVERVIEW",             navIdx:0, items:[{ label:"Summary",              subIdx:0 }] },
+  { section:"TRACK A · FINANCIAL",  navIdx:1, items:[{ label:"P1 · Financial Dashboard",  subIdx:0 }, { label:"P2 · Value Realization", subIdx:1 }] },
+  { section:"TRACK B · GOVERNANCE", navIdx:2, items:[{ label:"P3 · Cloud Governance",      subIdx:0 }, { label:"P4 · Decision Rights",   subIdx:1 }] },
+  { section:"TRACK C · OPERATIONS", navIdx:3, items:[{ label:"P5 · DevOps Simulator", subIdx:0 }, { label:"P6 · Resilience & HA",   subIdx:1 }] },
+  { section:"TRACK D · INNOVATION", navIdx:4, items:[{ label:"P7 · AI Investment",   subIdx:0 }] },
+  { section:"TRACK E · ADOPTION",   navIdx:5, items:[{ label:"P8 · Org Adoption",    subIdx:0 }, { label:"P9 · Product Diffusion",  subIdx:1 }] },
+  { section:"EXTRA CREDIT",         navIdx:6, items:[{ label:"EC1 · Cost Management",subIdx:0 }] },
+  { section:"DEPLOYMENT",           navIdx:7, items:[{ label:"About & Deployment",   subIdx:0 }] },
 ];
 
 const TT = { background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, boxShadow:C.shadowMd, color:C.text, fontSize:12 };
@@ -113,19 +125,42 @@ function PH({ title, subtitle }) {
   );
 }
 
-function SubTabBar({ tabs, active, onChange }) {
+
+// ── Panel Tiles (clickable from Executive Summary) ────────────────────────────
+const PANEL_TILES = [
+  { n:"P1", label:"Financial Dashboard",   desc:"5-year TCO, NPV, ROI, and cash flow model with adjustable CapEx, OpEx, and cloud savings.", navIdx:1, subIdx:0 },
+  { n:"P2", label:"Value Realization",     desc:"Quantifies migration benefits — productivity, downtime, compliance, and CSAT.", navIdx:1, subIdx:1 },
+  { n:"P3", label:"Cloud Governance",      desc:"Board-level governance structure, security controls radar, and compliance KPI tracking.", navIdx:2, subIdx:0 },
+  { n:"P4", label:"Decision Rights",       desc:"Interactive flowchart for Strategic, Budget, Security, and Operational approval workflows.", navIdx:2, subIdx:1 },
+  { n:"P5", label:"DevOps Simulator",      desc:"DORA performance simulator plus a 4-phase migration roadmap with milestones.", navIdx:3, subIdx:0 },
+  { n:"P6", label:"Resilience & HA",       desc:"Uptime/cost curves, risk heatmap, and availability scorecard driven by redundancy and RTO.", navIdx:3, subIdx:1 },
+  { n:"P7", label:"AI Investment",         desc:"ROI and marginal return curves on AI spend with data quality and adoption inputs.", navIdx:4, subIdx:0 },
+  { n:"P8", label:"Org Adoption",          desc:"S-curve adoption simulator driven by training hours, leadership, and communication.", navIdx:5, subIdx:0 },
+  { n:"P9", label:"Product Diffusion",     desc:"Bass diffusion model projecting customer growth and CAC vs LTV across markets.", navIdx:5, subIdx:1 },
+  { n:"EC1", label:"Cost Management",      desc:"Live-style AWS cost explorer with service breakdown, trends, and optimization flags.", navIdx:6, subIdx:0 },
+  { n:"EC2", label:"About & Deployment",   desc:"AWS infrastructure overview, estimated costs, security posture, and implementation notes.", navIdx:7, subIdx:0 },
+];
+
+function PanelTiles() {
+  const navigateTo = useContext(NavContext);
   return (
-    <div style={{ display:"flex", gap:6, marginBottom:20, flexWrap:"wrap" }}>
-      {tabs.map((t, i) => (
-        <button key={i} onClick={() => onChange(i)} style={{
-          padding:"7px 16px", borderRadius:20,
-          border:`1px solid ${active === i ? C.accent : C.border}`,
-          background: active === i ? C.accent : C.surface,
-          color: active === i ? C.white : C.textMid,
-          fontSize:12, fontWeight:600, cursor:"pointer"
-        }}>{t}</button>
-      ))}
-    </div>
+    <Card style={{ marginBottom:14 }}>
+      <ST>Capstone Portfolio — Click any panel to navigate</ST>
+      <div style={{ display:"flex", flexWrap:"wrap", gap:10, marginTop:4, justifyContent:"center" }}>
+        {PANEL_TILES.map(p => (
+          <button key={p.n} onClick={() => navigateTo(p.navIdx, p.subIdx)}
+            style={{ textAlign:"left", padding:"14px 16px", background:C.surfaceAlt, border:`1px solid ${C.border}`, borderRadius:10, cursor:"pointer", transition:"border-color 0.18s, box-shadow 0.18s, background 0.18s, transform 0.18s", flex:"0 0 calc(33.33% - 7px)" }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.boxShadow = "0 4px 16px rgba(37,99,235,0.18)"; e.currentTarget.style.background = C.accentSoft; e.currentTarget.style.transform = "translateY(-2px)"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.background = C.surfaceAlt; e.currentTarget.style.transform = "translateY(0)"; }}>
+            <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
+              <span style={{ background:C.accentSoft, color:C.accent, fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:20 }}>{p.n}</span>
+              <span style={{ color:C.text, fontSize:13, fontWeight:700 }}>{p.label}</span>
+            </div>
+            <span style={{ color:C.slate, fontSize:12, lineHeight:1.5 }}>{p.desc}</span>
+          </button>
+        ))}
+      </div>
+    </Card>
   );
 }
 
@@ -181,88 +216,43 @@ function ExecutiveSummary() {
         <KPI label="Peak Adoption" value="76%" color={C.accent} sub="24-month projection" />
       </div>
 
-      <Card style={{ marginBottom:14 }}>
-          <ST>Capstone Portfolio — Apps Created & Integration</ST>
-          <div style={{ marginBottom:12 }}>
+      <PanelTiles />
+
+      <Card>
+          <ST>Board-Level Narrative & Recommended Actions</ST>
+          <p style={{ color:C.textMid, fontSize:14, lineHeight:1.75, textAlign:"left" }}>
+            Crimson3 Vitals's AWS migration presents a compelling strategic case. The simulation confirms a positive 5-year NPV with payback by Year 3, driven primarily by downtime reduction and compliance savings across 8 hospital facilities. Three priority actions — HIPAA remediation, DevOps automation, and leadership engagement — are critical to achieving projected outcomes on schedule.
+          </p>
+          <ST>Top 3 Recommended Actions</ST>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, marginTop:8 }}>
             {[
-              { n:"P1", label:"Executive Financial Dashboard", desc:"5-year TCO, NPV, ROI, and cash flow model with adjustable CapEx, OpEx, discount rate, and cloud savings assumptions." },
-              { n:"P2", label:"Value Realization Dashboard", desc:"Quantifies tangible and intangible migration benefits — productivity, downtime, compliance, and CSAT — with waterfall and ROI trend charts." },
-              { n:"P3", label:"Cloud Governance Dashboard", desc:"Board-level governance structure with 5-node org hierarchy, security controls radar, and compliance KPI tracking." },
-              { n:"P4", label:"Decision Rights & Operating Model", desc:"Interactive flowchart for Strategic, Budget, Security, and Operational approval workflows with SLA targets." },
-              { n:"P5", label:"DevOps & Implementation Simulator", desc:"DORA performance simulator (deploy frequency, failure rate, lead time, MTTR) plus a 4-phase migration roadmap with milestones and ownership." },
-              { n:"P6", label:"Resilience & Availability Dashboard", desc:"Cloud resilience simulator with uptime/cost curves, risk heatmap, and availability scorecard driven by redundancy, regions, RTO, and RPO." },
-              { n:"P7", label:"AI Investment Explorer", desc:"ROI and marginal return curves showing diminishing returns on AI spend, with data quality and adoption rate as shape-changing inputs." },
-              { n:"P8", label:"Organizational Adoption Dashboard", desc:"S-curve adoption simulator driven by training hours, leadership engagement, and communication effectiveness, with resistance index and readiness score." },
-              { n:"P9", label:"Product Diffusion & Market Expansion", desc:"Bass diffusion model projecting customer growth, market penetration, and CAC vs LTV across B2B/B2C markets with network effect inputs." },
-            ].map(p => (
-              <div key={p.n} style={{ display:"flex", gap:10, padding:"7px 0", borderBottom:`1px solid ${C.border}`, alignItems:"flex-start" }}>
-                <span style={{ background:C.accentSoft, color:C.accent, fontSize:10, fontWeight:700, padding:"2px 7px", borderRadius:20, flexShrink:0, marginTop:1 }}>{p.n}</span>
-                <div>
-                  <span style={{ color:C.text, fontSize:13, fontWeight:600 }}>{p.label} — </span>
-                  <span style={{ color:C.slate, fontSize:12 }}>{p.desc}</span>
+              { n:"1", priority:"Critical", action:"Remediate HIPAA Compliance", detail:"Prioritize IAM policy audits and incident response to reach the 95% audit score before go-live.", color:C.red, metric:"Audit Score", current:87, target:95 },
+              { n:"2", priority:"High",     action:"Push Automation Above 70%",  detail:"Crossing 70% automation unlocks Elite DORA performance and reduces deployment failures by 40%.", color:C.amber, metric:"Automation", current:65, target:70 },
+              { n:"3", priority:"High",     action:"Invest in Leadership Engagement", detail:"Leadership engagement is the top adoption risk. A structured change program drives 80% adoption in 6 months.", color:C.accent, metric:"Engagement", current:60, target:70 },
+            ].map(r => (
+              <div key={r.n}
+                style={{ borderRadius:10, border:`1px solid ${C.border}`, overflow:"hidden", transition:"transform 0.18s, box-shadow 0.18s", cursor:"default" }}
+                onMouseEnter={e => { e.currentTarget.style.transform="translateY(-3px)"; e.currentTarget.style.boxShadow="0 6px 20px rgba(0,0,0,0.09)"; }}
+                onMouseLeave={e => { e.currentTarget.style.transform="translateY(0)"; e.currentTarget.style.boxShadow="none"; }}>
+                <div style={{ height:4, background:r.color }} />
+                <div style={{ padding:"14px 16px" }}>
+                  <div style={{ fontSize:10, fontWeight:700, color:r.color, textTransform:"uppercase", letterSpacing:0.8, marginBottom:6 }}>{r.priority}</div>
+                  <div style={{ color:C.text, fontSize:13, fontWeight:700, lineHeight:1.35, marginBottom:12 }}>{r.action}</div>
+                  <div style={{ marginBottom:10 }}>
+                    <div style={{ display:"flex", justifyContent:"space-between", marginBottom:5 }}>
+                      <span style={{ color:C.slate, fontSize:11 }}>{r.metric}</span>
+                      <span style={{ color:C.text, fontSize:11, fontWeight:700 }}>{r.current}% → {r.target}%</span>
+                    </div>
+                    <div style={{ height:6, background:C.surfaceAlt, borderRadius:3, overflow:"hidden" }}>
+                      <div style={{ width:`${r.current}%`, height:"100%", background:r.color, borderRadius:3 }} />
+                    </div>
+                  </div>
+                  <div style={{ color:C.slate, fontSize:12, lineHeight:1.6 }}>{r.detail}</div>
                 </div>
               </div>
             ))}
           </div>
-          <div style={{ display:"flex", gap:8, alignItems:"flex-start", marginTop:12, padding:"10px 14px", background:C.surfaceAlt, borderRadius:8, border:`1px solid ${C.border}` }}>
-            <div style={{ width:5, height:5, borderRadius:"50%", background:C.teal, flexShrink:0, marginTop:5 }} />
-            <span style={{ color:C.textMid, fontSize:12, lineHeight:1.6 }}>All 9 panels (+ 2 extra credit) are integrated into a single React application with tab-based navigation and a unified design system — deployed via AWS Amplify Hosting (CloudFront + S3) with AWS Cognito for authentication.</span>
-          </div>
         </Card>
-
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
-        <Card>
-          <ST>Panel Status Overview</ST>
-          {[
-            { label:"Financial ROI", status:"On Track", color:C.green, note:"NPV positive, payback Yr 3" },
-            { label:"Value Realization", status:"On Track", color:C.green, note:"$890K+ total value" },
-            { label:"HIPAA Governance", status:"Attention", color:C.amber, note:"Score 87% — target 95%" },
-            { label:"Decision Rights", status:"On Track", color:C.green, note:"SLA framework defined" },
-            { label:"DevOps / DORA", status:"On Track", color:C.teal, note:"High performance tier" },
-            { label:"Resilience & HA", status:"On Track", color:C.green, note:"99.9% uptime achieved" },
-            { label:"AI Investment", status:"On Track", color:C.green, note:"ROI peaks at $300K" },
-            { label:"Org Adoption", status:"Attention", color:C.amber, note:"Leadership engagement needed" },
-            { label:"Market Diffusion", status:"On Track", color:C.green, note:"LTV:CAC 5.6x — healthy" },
-            { label:"Cloud Cost Mgmt", status:"Demo Mode", color:C.teal, note:"Connect AWS for live data" },
-          ].map((r, i) => (
-            <div key={i} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"7px 0", borderBottom:`1px solid ${C.border}` }}>
-              <span style={{ color:C.text, fontSize:14 }}>{r.label}</span>
-              <div style={{ display:"flex", gap:8, alignItems:"center" }}>
-                <span style={{ color:C.slate, fontSize:12 }}>{r.note}</span>
-                <span style={{ background:r.color === C.green ? C.greenSoft : r.color === C.amber ? C.amberSoft : C.tealSoft, color:r.color, fontSize:11, fontWeight:700, padding:"2px 8px", borderRadius:20 }}>{r.status}</span>
-              </div>
-            </div>
-          ))}
-        </Card>
-
-        <Card>
-          <ST>Board-Level Narrative & Recommended Actions</ST>
-          <p style={{ color:C.textMid, fontSize:15, lineHeight:1.7 }}>
-            Crimson3 Vitals's AWS migration presents a compelling strategic case. The simulation confirms a positive 5-year NPV
-            with payback by Year 3, driven primarily by downtime reduction and compliance savings across 8 hospital facilities.
-            HIPAA compliance at 87% requires immediate remediation before go-live to meet the 95% audit threshold.
-          </p>
-          <p style={{ color:C.textMid, fontSize:15, lineHeight:1.7 }}>
-            DevOps performance is at the High DORA tier — increasing automation above 70% will unlock Elite performance
-            and reduce change failure rate by an estimated 40%. Organizational adoption projections show 76% peak adoption,
-            contingent on 30+ training hours and 70%+ leadership engagement.
-          </p>
-          <ST>Top 3 Recommended Actions</ST>
-          {[
-            { n:"1", action:"Remediate HIPAA compliance gaps", detail:"Prioritize IAM policy audits and incident response to reach 95% audit score before go-live.", color:C.red },
-            { n:"2", action:"Push automation above 70%", detail:"Crossing the 70% automation threshold unlocks Elite DORA performance and reduces deployment failures by 40%.", color:C.amber },
-            { n:"3", action:"Invest in leadership engagement", detail:"Leadership engagement is the top adoption risk. A structured change-management program drives 80% adoption within 6 months.", color:C.accent },
-          ].map(r => (
-            <div key={r.n} style={{ display:"flex", gap:12, marginBottom:12, padding:"10px 14px", background:C.surfaceAlt, borderRadius:8, border:`1px solid ${C.border}` }}>
-              <div style={{ width:24, height:24, borderRadius:"50%", background:r.color, color:C.white, display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:700, flexShrink:0 }}>{r.n}</div>
-              <div>
-                <div style={{ color:C.text, fontSize:15, fontWeight:600 }}>{r.action}</div>
-                <div style={{ color:C.slate, fontSize:13, marginTop:3 }}>{r.detail}</div>
-              </div>
-            </div>
-          ))}
-        </Card>
-      </div>
     </div>
   );
 }
@@ -520,8 +510,12 @@ function CloudGovernance() {
 
   const maturity = Math.round((cs*0.5) + ((100-rl)*0.3) + ((10-Math.min(pe+af,10))*2));
   const radarData = [
-    { subject:"IAM", A:88 }, { subject:"Encryption", A:95 }, { subject:"Network", A:78 },
-    { subject:"Logging", A:82 }, { subject:"Incident Resp", A:70 }, { subject:"HIPAA", A:cs },
+    { subject:"IAM",          A: Math.round(Math.min(100, cs * 0.95)) },
+    { subject:"Encryption",   A: Math.round(Math.max(50, 100 - pe * 2.5)) },
+    { subject:"Network",      A: Math.round(Math.max(40, 100 - rl * 0.6)) },
+    { subject:"Logging",      A: Math.round(Math.max(40, cs * 0.85 + (15 - af))) },
+    { subject:"Incident Resp",A: Math.round(Math.max(35, 100 - af * 4.5)) },
+    { subject:"HIPAA",        A: cs },
   ];
 
   return (
@@ -839,6 +833,7 @@ function ResilienceDashboard() {
                 <Legend wrapperStyle={{ color:C.slate, fontSize:11 }} />
                 <Line yAxisId="left" type="monotone" dataKey="uptime" stroke={C.green} name="Uptime %" strokeWidth={2} dot={{ r:3, fill:C.green }} />
                 <Line yAxisId="right" type="monotone" dataKey="cost" stroke={C.amber} name="Cost ($K/mo)" strokeWidth={2} dot={{ r:3, fill:C.amber }} />
+                <ReferenceLine yAxisId="left" x={`R${redundancy}`} stroke={C.accent} strokeWidth={2} strokeDasharray="4 3" label={{ value:"Current", position:"top", fontSize:10, fill:C.accent }} />
               </LineChart>
             </ResponsiveContainer>
           </Card>
@@ -892,13 +887,13 @@ function AIInvestment() {
   const efficiency = Math.min(100, (dq*0.5)+(ar*0.3)+(Math.min(inv,300)/300*20));
   const maxInv = Math.max(500, inv * 1.5);
   const inflection = (dq / 100) * maxInv * 0.6;
-  const curve = Array.from({ length: 10 }, (_, j) => {
-    const i = Math.round((j / 9) * maxInv / 10) * 10;
+  const curve = Array.from({ length: 11 }, (_, j) => {
+    const i = Math.round((j / 10) * maxInv);
     const roiMult = i > inflection * 1.5 ? 0.8 : i > inflection * 0.6 ? 1.2 : 1.0;
     return {
-      investment: `$${i}K`,
-      roi: (roiMult * (dq/100) * (ar/100) * 2.5 * (i / (inv || 300)) * 100).toFixed(0),
-      marginal: Math.max(0, 3 - (i / (inflection * 0.7))).toFixed(2),
+      investment: i,
+      roi: +(roiMult * (dq/100) * (ar/100) * 2.5 * (i / (maxInv)) * 100).toFixed(0),
+      marginal: +Math.max(0, (ar/100) * (3 - (i / (inflection * 0.7)))).toFixed(2),
     };
   });
 
@@ -931,10 +926,11 @@ function AIInvestment() {
             <ResponsiveContainer width="100%" height={150}>
               <AreaChart data={curve}>
                 <CartesianGrid {...GRID} />
-                <XAxis dataKey="investment" tick={TICK} interval={2} />
+                <XAxis dataKey="investment" type="number" domain={[0, maxInv]} tickFormatter={v=>`$${v}K`} tick={TICK} interval={2} />
                 <YAxis tick={TICK} />
-                <Tooltip contentStyle={TT} />
+                <Tooltip contentStyle={TT} formatter={(v, n) => [v, n]} labelFormatter={v=>`$${v}K`} />
                 <Area type="monotone" dataKey="roi" stroke={C.accent} fill={C.accentSoft} name="ROI %" strokeWidth={2} />
+                <ReferenceLine x={inv} stroke={C.green} strokeWidth={2} strokeDasharray="4 3" label={{ value:"Current", position:"top", fontSize:10, fill:C.green }} />
               </AreaChart>
             </ResponsiveContainer>
           </Card>
@@ -943,10 +939,11 @@ function AIInvestment() {
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={curve}>
                 <CartesianGrid {...GRID} />
-                <XAxis dataKey="investment" tick={TICK} interval={2} />
+                <XAxis dataKey="investment" type="number" domain={[0, maxInv]} tickFormatter={v=>`$${v}K`} tick={TICK} interval={2} />
                 <YAxis tick={TICK} />
-                <Tooltip contentStyle={TT} />
+                <Tooltip contentStyle={TT} formatter={(v, n) => [v, n]} labelFormatter={v=>`$${v}K`} />
                 <ReferenceLine y={1} stroke={C.red} strokeDasharray="4 4" label={{ value:"Break-even", fill:C.red, fontSize:10 }} />
+                <ReferenceLine x={inv} stroke={C.green} strokeWidth={2} strokeDasharray="4 3" label={{ value:"Current", position:"top", fontSize:10, fill:C.green }} />
                 <Line type="monotone" dataKey="marginal" stroke={C.amber} name="Marginal Return (x)" strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
@@ -1551,8 +1548,9 @@ export default function App() {
   const activeSub = activeSubs[activeNav];
   const PanelComponent = PANEL_MAP[activeNav][activeSub];
 
-  const setActiveSub = (i) => {
-    setActiveSubs(prev => { const n = [...prev]; n[activeNav] = i; return n; });
+  const navigateTo = (navIdx, subIdx) => {
+    setActiveNav(navIdx);
+    setActiveSubs(prev => { const n = [...prev]; n[navIdx] = subIdx; return n; });
   };
 
   if (!authChecked) {
@@ -1584,35 +1582,46 @@ export default function App() {
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
         input[type=range] { height: 4px; }
+        .sidebar-btn { transition: background 0.18s ease, color 0.18s ease, border-left-color 0.18s ease, padding-left 0.18s ease; }
+        .sidebar-btn:hover { background: #EBF1FF !important; color: #2563EB !important; padding-left: 20px !important; }
       `}</style>
-      <div style={{ padding:"10px 20px", borderBottom:`1px solid ${C.border}`, display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0, background:C.navy, boxShadow:C.shadowMd }}>
+
+      <div style={{ padding:"10px 20px", borderBottom:`1px solid ${C.border}`, display:"flex", justifyContent:"space-between", alignItems:"center", flexShrink:0, background:C.navy, boxShadow:"0 2px 16px rgba(37,99,235,0.25)" }}>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-          <div style={{ width:8, height:8, borderRadius:"50%", background:"#34D399", boxShadow:"0 0 6px #34D399" }} />
-          <span style={{ color:C.white, fontWeight:700, fontSize:15, letterSpacing:0.5 }}>Crimson3 Vitals</span>
-          <span style={{ color:"rgba(255,255,255,0.4)", fontSize:13 }}>AWS Cloud Migration Simulator</span>
+          <div style={{ width:10, height:10, borderRadius:"50%", background:"#34D399", boxShadow:"0 0 10px #34D399, 0 0 20px rgba(52,211,153,0.5)", flexShrink:0 }} />
+          <span style={{ color:C.white, fontWeight:800, fontSize:18, letterSpacing:0.2, textShadow:"0 0 18px rgba(255,255,255,0.2)" }}>Crimson3 Vitals</span>
+          <span style={{ color:"rgba(255,255,255,0.35)", fontSize:13 }}>— AWS Cloud Migration Simulator</span>
         </div>
         <button onClick={handleLogout} style={{ background:"rgba(255,255,255,0.08)", border:"1px solid rgba(255,255,255,0.15)", borderRadius:8, padding:"6px 14px", color:"rgba(255,255,255,0.7)", fontWeight:600, cursor:"pointer", fontSize:12 }}>
           Log Out
         </button>
       </div>
 
-      <div style={{ display:"flex", overflowX:"auto", borderBottom:`1px solid ${C.border}`, flexShrink:0, background:C.surface, padding:"0 4px" }}>
-        {NAV.map((tab, i) => (
-          <button key={i} onClick={() => setActiveNav(i)} style={{ padding:"9px 12px", border:"none", background:"transparent", cursor:"pointer", color:activeNav===i?C.accent:C.slate, borderBottom:activeNav===i?`2px solid ${C.accent}`:"2px solid transparent", fontSize:11, fontWeight:activeNav===i?700:500, whiteSpace:"nowrap", transition:"color 0.15s", display:"flex", alignItems:"center", gap:5 }}>
-            <span>{tab.icon}</span>
-            <span>{tab.label}</span>
-            {tab.badge && <span style={{ background:C.tealSoft, color:C.teal, fontSize:9, fontWeight:700, padding:"1px 6px", borderRadius:20 }}>{tab.badge}</span>}
-          </button>
-        ))}
-      </div>
-
       <div style={{ flex:1, display:"flex", overflow:"hidden", minHeight:0 }}>
-        <div style={{ flex:1, overflowY:"auto", padding:"18px 22px", minWidth:0 }}>
-          {NAV[activeNav].subTabs.length >= 1 && (
-            <SubTabBar tabs={NAV[activeNav].subTabs} active={activeSub} onChange={setActiveSub} />
-          )}
-          <PanelComponent />
+        <div style={{ width:210, flexShrink:0, background:C.surface, borderRight:`1px solid ${C.border}`, overflowY:"auto", display:"flex", flexDirection:"column", padding:"8px 0" }}>
+          {SIDEBAR.map((track) => (
+            <div key={track.section} style={{ marginBottom:4 }}>
+              <div style={{ padding:"8px 16px 4px", fontSize:12, fontWeight:700, letterSpacing:1.1, color:C.slate, textTransform:"uppercase", textAlign:"left" }}>
+                {track.section}
+              </div>
+              {track.items.map((item) => {
+                const isActive = activeNav === track.navIdx && activeSub === item.subIdx;
+                return (
+                  <button key={item.label} className="sidebar-btn" onClick={() => navigateTo(track.navIdx, item.subIdx)}
+                    style={{ width:"100%", textAlign:"left", padding:"8px 16px", border:"none", background:isActive ? C.accentSoft : "transparent", cursor:"pointer", color:isActive ? C.accent : C.textMid, fontSize:13, fontWeight:isActive ? 700 : 600, borderLeft:isActive ? `3px solid ${C.accent}` : "3px solid transparent", lineHeight:1.4 }}>
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
         </div>
+
+        <NavContext.Provider value={navigateTo}>
+          <div style={{ flex:1, overflowY:"auto", padding:"18px 22px", minWidth:0 }}>
+            <PanelComponent />
+          </div>
+        </NavContext.Provider>
       </div>
     </div>
   );
