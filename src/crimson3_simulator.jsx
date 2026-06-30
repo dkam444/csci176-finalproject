@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect, useRef, createContext, useContext } from "react";
 const NavContext = createContext(null);
 import {
   LineChart, Line, BarChart, Bar, AreaChart, Area,
@@ -104,12 +104,12 @@ function ST({ children }) {
 
 function Insight({ text }) {
   return (
-    <div style={{ marginTop:14 }}>
+    <div style={{ background:C.accentSoft, border:`1px solid #BFDBFE`, borderRadius:10, padding:"12px 16px", marginTop:14, marginBottom:18 }}>
       <div style={{ color:C.accent, fontSize:10, fontWeight:700, letterSpacing:2, textTransform:"uppercase", marginBottom:6, display:"flex", alignItems:"center", gap:8 }}>
-        <div style={{ width:3, height:12, background:C.accent, borderRadius:2 }} />
-        Executive Recommendations
+        <div style={{ width:3, height:10, background:C.accent, borderRadius:2 }} />
+        Executive Recommendation
       </div>
-      <div style={{ background:C.accentSoft, border:`1px solid #BFDBFE`, borderRadius:10, padding:"12px 16px", color:C.navyMid, fontSize:13, lineHeight:1.6, display:"flex", gap:10 }}>
+      <div style={{ color:C.navyMid, fontSize:13, lineHeight:1.6, display:"flex", gap:10, textAlign:"left" }}>
         <span>💡</span><span>{text}</span>
       </div>
     </div>
@@ -282,6 +282,7 @@ function FinancialDashboard() {
   return (
     <div>
       <PH title="Executive Financial Dashboard" subtitle="5-year TCO, NPV, ROI, and cash flow analysis" />
+      <Insight text={`Crimson3 Vitals's AWS migration requires $${(capex/1e3).toFixed(0)}K upfront. At ${savings}% cloud savings, payback is ${payback.toFixed(1)} years with a 5-year NPV of $${(npv/1e3).toFixed(0)}K — ${npv>0?"a compelling investment case":"requiring cost optimization to justify"}.`} />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Year-1 CapEx" value={`$${(capex/1e6).toFixed(1)}M`} color={C.amber} />
         <KPI label="Annual OpEx" value={`$${(opex/1e3).toFixed(0)}K`} color={C.accent} />
@@ -364,7 +365,6 @@ function FinancialDashboard() {
           </table>
         </div>
       </Card>
-      <Insight text={`Crimson3 Vitals's AWS migration requires $${(capex/1e3).toFixed(0)}K upfront. At ${savings}% cloud savings, payback is ${payback.toFixed(1)} years with a 5-year NPV of $${(npv/1e3).toFixed(0)}K — ${npv>0?"a compelling investment case":"requiring cost optimization to justify"}.`} />
     </div>
   );
 }
@@ -397,6 +397,7 @@ function ValueRealization() {
   return (
     <div>
       <PH title="Value Realization Dashboard" subtitle="Tangible and intangible benefit analysis" />
+      <Insight text={`Crimson3 Vitals's migration generates $${(total/1e3).toFixed(0)}K in total value. The largest driver is ${dv>pv?"downtime reduction":"productivity gains"}, reflecting critical hospital uptime requirements.`} />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Productivity Gain" value={`$${(pv/1e3).toFixed(0)}K`} color={C.accent} />
         <KPI label="Downtime Savings" value={`$${(dv/1e3).toFixed(0)}K`} color={C.teal} />
@@ -496,7 +497,6 @@ function ValueRealization() {
         </Card>
       </div>
 
-      <Insight text={`Crimson3 Vitals's migration generates $${(total/1e3).toFixed(0)}K in total value. The largest driver is ${dv>pv?"downtime reduction":"productivity gains"}, reflecting critical hospital uptime requirements.`} />
     </div>
   );
 }
@@ -521,6 +521,7 @@ function CloudGovernance() {
   return (
     <div>
       <PH title="Cloud Governance Dashboard" subtitle="Board-level governance structure, compliance KPIs, and security controls" />
+      <Insight text={`Crimson3 Vitals's governance maturity score of ${maturity}% reflects ${af} open audit findings. HIPAA compliance at ${cs}% ${cs>=95?"meets the 95% audit target":"is below the 95% audit target — immediate remediation recommended"}.`} />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Compliance Score" value={`${cs}%`} color={cs>80?C.green:C.amber} />
         <KPI label="Policy Exceptions" value={pe} color={pe<5?C.green:C.red} />
@@ -589,7 +590,6 @@ function CloudGovernance() {
           </Card>
         </div>
       </div>
-      <Insight text={`Crimson3 Vitals's governance maturity score of ${maturity}% reflects ${af} open audit findings. HIPAA compliance at ${cs}% ${cs>=95?"meets the 95% audit target":"is below the 95% audit target — immediate remediation recommended"}.`} />
     </div>
   );
 }
@@ -612,6 +612,7 @@ function DecisionRights() {
   return (
     <div>
       <PH title="Decision Rights & Operating Model" subtitle="Approval workflows, SLA targets, and governance operating model" />
+      <Insight text={`Crimson3 Vitals uses a ${selected} decision workflow with ${workflows[selected].length} approval gates. Critical HIPAA systems require ${escalation}h escalation windows with a ${uptime}% uptime SLA.`} />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Uptime SLA" value={`${uptime}%`} color={sc(uptime,99.9,99.5)} />
         <KPI label="Response Time" value={`${response}ms`} color={sc(500-response,350,200)} />
@@ -669,7 +670,6 @@ function DecisionRights() {
           </div>
         </Card>
       </div>
-      <Insight text={`Crimson3 Vitals uses a ${selected} decision workflow with ${workflows[selected].length} approval gates. Critical HIPAA systems require ${escalation}h escalation windows with a ${uptime}% uptime SLA.`} />
     </div>
   );
 }
@@ -696,6 +696,7 @@ function DevOpsSimulator() {
   return (
     <div>
       <PH title="DevOps & Implementation Simulator" subtitle="DORA metrics, automation performance, and deployment trends" />
+      <Insight text={`At ${automation}% automation with ${teamSize} engineers, Crimson3 Vitals achieves ${doraLevel} DORA performance — ${deployFreq} deploys/month with ${failureRate}% failure rate. ${automation>70?"Automation above 70% drives 50% higher deploy frequency and 40% fewer failures.":"Increasing automation above 70% is recommended to reach Elite DORA performance."}`} />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Deploy Frequency" value={`${deployFreq}/mo`} color={C.accent} />
         <KPI label="Change Failure Rate" value={`${failureRate}%`} color={parseFloat(failureRate)<10?C.green:C.red} />
@@ -774,7 +775,6 @@ function DevOpsSimulator() {
           </div>
         </div>
       </Card>
-      <Insight text={`At ${automation}% automation with ${teamSize} engineers, Crimson3 Vitals achieves ${doraLevel} DORA performance — ${deployFreq} deploys/month with ${failureRate}% failure rate. ${automation>70?"Automation above 70% drives 50% higher deploy frequency and 40% fewer failures.":"Increasing automation above 70% is recommended to reach Elite DORA performance."}`} />
     </div>
   );
 }
@@ -805,6 +805,7 @@ function ResilienceDashboard() {
   return (
     <div>
       <PH title="Resilience & Availability Dashboard" subtitle="Cloud resilience simulation with uptime, cost, and risk heatmap" />
+      <Insight text={`Redundancy Level ${redundancy} across ${regions} AWS region${regions>1?"s":""} achieves ${uptime.toFixed(3)}% availability at $${(monthlyCost/1e3).toFixed(0)}K/month. ${redundancy>=4?"Optimal redundancy achieved.":"Level "+(redundancy+1)+" would improve uptime ~0.3% for $8K/mo additional cost."}`} />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Availability" value={`${uptime.toFixed(3)}%`} color={uptime>=99.9?C.green:C.amber} />
         <KPI label="Monthly Cost" value={`$${(monthlyCost/1e3).toFixed(0)}K`} color={C.amber} />
@@ -871,7 +872,6 @@ function ResilienceDashboard() {
           </Card>
         </div>
       </div>
-      <Insight text={`Redundancy Level ${redundancy} across ${regions} AWS region${regions>1?"s":""} achieves ${uptime.toFixed(3)}% availability at $${(monthlyCost/1e3).toFixed(0)}K/month. ${redundancy>=4?"Optimal redundancy achieved.":"Level "+(redundancy+1)+" would improve uptime ~0.3% for $8K/mo additional cost."}`} />
     </div>
   );
 }
@@ -900,6 +900,7 @@ function AIInvestment() {
   return (
     <div>
       <PH title="AI Investment Explorer" subtitle="ROI curves, marginal returns, and investment efficiency analysis" />
+      <Insight text={`At $${inv}K AI investment with ${dq}% data quality, Crimson3 Vitals achieves ${(roi*100).toFixed(0)}% projected ROI. ${inv>400?"Returns are plateauing — prioritize data quality over additional spend.":"Increasing data quality above 80% is the highest-leverage action."}`} />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="AI Investment" value={`$${inv}K`} color={C.accent} />
         <KPI label="Projected ROI" value={`${(roi*100).toFixed(0)}%`} color={roi>1.5?C.green:C.amber} />
@@ -950,7 +951,6 @@ function AIInvestment() {
           </Card>
         </div>
       </div>
-      <Insight text={`At $${inv}K AI investment with ${dq}% data quality, Crimson3 Vitals achieves ${(roi*100).toFixed(0)}% projected ROI. ${inv>400?"Returns are plateauing — prioritize data quality over additional spend.":"Increasing data quality above 80% is the highest-leverage action."}`} />
     </div>
   );
 }
@@ -977,6 +977,7 @@ function OrgAdoption() {
   return (
     <div>
       <PH title="Organizational Adoption Dashboard" subtitle="Change management simulation — S-curve, resistance index, and readiness score" />
+      <Insight text={`With ${training}h training and ${leadership}% leadership engagement, Crimson3 Vitals projects ${adoptionPeak.toFixed(0)}% peak adoption over 24 months. ${training>=30&&leadership>=70?"Training 30h+ with leadership >70% drives 80% adoption within 6 months.":"Increasing training and leadership engagement is the highest-leverage intervention."}`} />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Peak Adoption" value={`${adoptionPeak.toFixed(0)}%`} color={adoptionPeak>75?C.green:C.amber} />
         <KPI label="Resistance Index" value={`${resistance.toFixed(0)}%`} color={resistance<25?C.green:C.red} />
@@ -1036,7 +1037,6 @@ function OrgAdoption() {
           </div>
         </div>
       </div>
-      <Insight text={`With ${training}h training and ${leadership}% leadership engagement, Crimson3 Vitals projects ${adoptionPeak.toFixed(0)}% peak adoption over 24 months. ${training>=30&&leadership>=70?"Training 30h+ with leadership >70% drives 80% adoption within 6 months.":"Increasing training and leadership engagement is the highest-leverage intervention."}`} />
     </div>
   );
 }
@@ -1062,6 +1062,7 @@ function MarketDiffusion() {
   return (
     <div>
       <PH title="Product Diffusion & Market Expansion" subtitle="Bass diffusion model — customer growth, CAC vs LTV, and market penetration" />
+      <Insight text={`In a ${marketType} market of ${marketSize} organizations, Crimson3 Vitals achieves ${fin.penetration}% penetration over 36 months. ${networkEffect>0.6?"Strong network effects (>0.6) accelerate adoption dramatically.":"Increasing network effect above 0.6 is the key growth lever."} LTV:CAC of ${(diffusion[3].ltv/diffusion[3].cac).toFixed(1)}x ${diffusion[3].ltv/diffusion[3].cac>3?"signals healthy unit economics.":"needs improvement — target above 3x."}`} />
       <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:18 }}>
         <KPI label="Market Size" value={`${marketSize}`} color={C.accent} sub="organizations" />
         <KPI label="3-yr Penetration" value={`${fin.penetration}%`} color={fin.penetration>50?C.green:C.amber} />
@@ -1137,7 +1138,6 @@ function MarketDiffusion() {
           </Card>
         </div>
       </div>
-      <Insight text={`In a ${marketType} market of ${marketSize} organizations, Crimson3 Vitals achieves ${fin.penetration}% penetration over 36 months. ${networkEffect>0.6?"Strong network effects (>0.6) accelerate adoption dramatically.":"Increasing network effect above 0.6 is the key growth lever."} LTV:CAC of ${(diffusion[3].ltv/diffusion[3].cac).toFixed(1)}x ${diffusion[3].ltv/diffusion[3].cac>3?"signals healthy unit economics.":"needs improvement — target above 3x."}`} />
     </div>
   );
 }
@@ -1177,6 +1177,7 @@ function CostManagement() {
   return (
     <div>
       <PH title="Cloud Cost Management Panel" subtitle="AWS Cost Explorer simulation — FinOps dashboard with anomaly detection" />
+      <Insight text={`Crimson3 Vitals's top ${topN} AWS services cost $${(totalSpend/1e3).toFixed(1)}K/${granularity==="Monthly"?"month":"day"}. Top-3 concentration is ${top3.toFixed(0)}% — ${top3>70?"high concentration risk":"healthy spread"}. ${costReduction>0?`Applying a ${costReduction}% FinOps policy projects $${(totalSavings/1e3).toFixed(1)}K in savings.`:"Use the FinOps Policy lever to simulate cost-reduction scenarios."}`} />
       <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:14 }}>
         <span style={{ background:C.tealSoft, color:C.teal, fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:20 }}>DEMO MODE</span>
         <span style={{ color:C.slate, fontSize:12 }}>Synthetic AWS Cost Explorer data — connect AWS credentials for live data</span>
@@ -1247,7 +1248,6 @@ function CostManagement() {
           </Card>
         </div>
       </div>
-      <Insight text={`Crimson3 Vitals's top ${topN} AWS services cost $${(totalSpend/1e3).toFixed(1)}K/${granularity==="Monthly"?"month":"day"}. Top-3 concentration is ${top3.toFixed(0)}% — ${top3>70?"high concentration risk":"healthy spread"}. ${costReduction>0?`Applying a ${costReduction}% FinOps policy projects $${(totalSavings/1e3).toFixed(1)}K in savings.`:"Use the FinOps Policy lever to simulate cost-reduction scenarios."}`} />
     </div>
   );
 }
@@ -1352,8 +1352,6 @@ function AboutDeployment() {
           ))}
         </Card>
       </div>
-
-      <Insight text="All AWS resources for this project operate within the free tier or under $25/month. Enable AWS Budgets with a $10 alert threshold to prevent unexpected charges. Deleting the Amplify app and Cognito user pool removes all billable infrastructure immediately." />
 
       <Card style={{ marginTop:16 }}>
         <ST>Implementation Notes</ST>
@@ -1547,6 +1545,11 @@ export default function App() {
 
   const activeSub = activeSubs[activeNav];
   const PanelComponent = PANEL_MAP[activeNav][activeSub];
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    if (contentRef.current) contentRef.current.scrollTop = 0;
+  }, [activeNav, activeSub]);
 
   const navigateTo = (navIdx, subIdx) => {
     setActiveNav(navIdx);
@@ -1618,7 +1621,7 @@ export default function App() {
         </div>
 
         <NavContext.Provider value={navigateTo}>
-          <div style={{ flex:1, overflowY:"auto", padding:"18px 22px", minWidth:0 }}>
+          <div ref={contentRef} style={{ flex:1, overflowY:"auto", padding:"18px 22px", minWidth:0 }}>
             <PanelComponent />
           </div>
         </NavContext.Provider>
