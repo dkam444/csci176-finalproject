@@ -165,7 +165,7 @@ const PANEL_TILES = [
   { n:"P8", label:"Org Adoption",          desc:"S-curve adoption simulator driven by training hours, leadership, and communication.", navIdx:5, subIdx:0 },
   { n:"P9", label:"Product Diffusion",     desc:"Bass diffusion model projecting customer growth and CAC vs LTV across markets.", navIdx:5, subIdx:1 },
   { n:"EC1", label:"Cost Management",      desc:"Live-style AWS cost explorer with service breakdown, trends, and optimization flags.", navIdx:6, subIdx:0 },
-  { n:"EC3", label:"Observability",        desc:"Live Grafana Cloud dashboard showing real-time availability and reliability metrics for the Crimson3 AWS migration.", navIdx:7, subIdx:0 },
+  { n:"P10", label:"Observability",        desc:"Live Grafana Cloud dashboard showing real-time availability and reliability metrics for the Crimson3 AWS migration.", navIdx:7, subIdx:0 },
   { n:"EC2", label:"About & Deployment",   desc:"AWS infrastructure overview, estimated costs, security posture, and implementation notes.", navIdx:8, subIdx:0 },
 ];
 
