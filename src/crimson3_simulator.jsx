@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, createContext, useContext } from "react";
+import grafanaDashboard from "./assets/grafana_dashboard.png";
 const NavContext = createContext(null);
 import {
   LineChart, Line, BarChart, Bar, AreaChart, Area,
@@ -41,6 +42,7 @@ const NAV = [
   { label:"Innovation", icon:"🤖", subTabs:["P7 · AI Investment Explorer"] },
   { label:"Adoption", icon:"📈", subTabs:["P8 · Organizational Adoption Dashboard","P9 · Product Diffusion & Market Expansion"] },
   { label:"Cost Management", icon:"☁️", subTabs:["EC1 · Cloud Cost Management"], badge:"EC" },
+  { label:"Observability", icon:"📡", subTabs:["Live Dashboard"], badge:"NEW" },
   { label:"About & Deployment", icon:"🚀", subTabs:["EC2 · AWS Deployment Info"], badge:"EC2" },
 ];
 
@@ -52,7 +54,8 @@ const SIDEBAR = [
   { section:"TRACK D · INNOVATION", navIdx:4, items:[{ label:"P7 · AI Investment",   subIdx:0 }] },
   { section:"TRACK E · ADOPTION",   navIdx:5, items:[{ label:"P8 · Org Adoption",    subIdx:0 }, { label:"P9 · Product Diffusion",  subIdx:1 }] },
   { section:"EXTRA CREDIT",         navIdx:6, items:[{ label:"EC1 · Cost Management",subIdx:0 }] },
-  { section:"DEPLOYMENT",           navIdx:7, items:[{ label:"About & Deployment",   subIdx:0 }] },
+  { section:"OBSERVABILITY",        navIdx:7, items:[{ label:"📡 Observability", subIdx:0, badge:"NEW" }] },
+  { section:"DEPLOYMENT",           navIdx:8, items:[{ label:"About & Deployment",   subIdx:0 }] },
 ];
 
 const TT = { background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, boxShadow:C.shadowMd, color:C.text, fontSize:12 };
@@ -162,7 +165,8 @@ const PANEL_TILES = [
   { n:"P8", label:"Org Adoption",          desc:"S-curve adoption simulator driven by training hours, leadership, and communication.", navIdx:5, subIdx:0 },
   { n:"P9", label:"Product Diffusion",     desc:"Bass diffusion model projecting customer growth and CAC vs LTV across markets.", navIdx:5, subIdx:1 },
   { n:"EC1", label:"Cost Management",      desc:"Live-style AWS cost explorer with service breakdown, trends, and optimization flags.", navIdx:6, subIdx:0 },
-  { n:"EC2", label:"About & Deployment",   desc:"AWS infrastructure overview, estimated costs, security posture, and implementation notes.", navIdx:7, subIdx:0 },
+  { n:"EC3", label:"Observability",        desc:"Live Grafana Cloud dashboard showing real-time availability and reliability metrics for the Crimson3 AWS migration.", navIdx:7, subIdx:0 },
+  { n:"EC2", label:"About & Deployment",   desc:"AWS infrastructure overview, estimated costs, security posture, and implementation notes.", navIdx:8, subIdx:0 },
 ];
 
 function PanelTiles() {
@@ -1365,6 +1369,40 @@ function CostManagement() {
   );
 }
 
+// ── Observability ─────────────────────────────────────────────────────────────
+function Observability() {
+  return (
+    <div>
+      <PH title="Live Observability Dashboard" subtitle="Grafana Cloud · Availability & Reliability Metrics · Crimson3 Vitals AWS Migration" />
+      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:18 }}>
+        <span style={{ background:C.tealSoft, color:C.teal, fontSize:11, fontWeight:700, padding:"3px 10px", borderRadius:20, letterSpacing:0.5 }}>● LIVE — Grafana Cloud</span>
+      </div>
+      <Card style={{ padding:0, overflow:"hidden" }}>
+        <img
+          src={grafanaDashboard}
+          alt="Grafana Cloud observability dashboard for Crimson3 Vitals AWS migration"
+          style={{ width:"100%", display:"block", borderRadius:12, boxShadow:C.shadowMd }}
+        />
+      </Card>
+      <div style={{ marginTop:10, color:C.slate, fontSize:12, textAlign:"center", lineHeight:1.6, marginBottom:14 }}>
+        Grafana Cloud dashboard showing real-time synthetic metrics for Crimson3 Vitals AWS infrastructure. Powered by Grafana Cloud + Prometheus TestData datasource.
+      </div>
+      <div style={{ display:"flex", justifyContent:"center" }}>
+        <a
+          href="https://tenderchickpea1740.grafana.net/public-dashboards/2b3eb1847b1643ecaa94f94a732e27a2"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ display:"inline-flex", alignItems:"center", gap:8, background:C.accent, color:"#fff", fontWeight:700, fontSize:13, padding:"10px 22px", borderRadius:8, textDecoration:"none", boxShadow:"0 2px 10px rgba(37,99,235,0.25)", transition:"opacity 0.15s" }}
+          onMouseEnter={e => e.currentTarget.style.opacity="0.85"}
+          onMouseLeave={e => e.currentTarget.style.opacity="1"}
+        >
+          📡 Open Full Dashboard in Grafana Cloud →
+        </a>
+      </div>
+    </div>
+  );
+}
+
 // ── About & Deployment ────────────────────────────────────────────────────────
 function AboutDeployment() {
   const costRows = [
@@ -1517,6 +1555,7 @@ const PANEL_MAP = [
   [AIInvestment],
   [OrgAdoption, MarketDiffusion],
   [CostManagement],
+  [Observability],
   [AboutDeployment],
 ];
 
@@ -1724,8 +1763,9 @@ export default function App() {
                 const isActive = activeNav === track.navIdx && activeSub === item.subIdx;
                 return (
                   <button key={item.label} className="sidebar-btn" onClick={() => navigateTo(track.navIdx, item.subIdx)}
-                    style={{ width:"100%", textAlign:"left", padding:"8px 16px", border:"none", background:isActive ? C.accentSoft : "transparent", cursor:"pointer", color:isActive ? C.accent : C.textMid, fontSize:13, fontWeight:isActive ? 700 : 600, borderLeft:isActive ? `3px solid ${C.accent}` : "3px solid transparent", lineHeight:1.4 }}>
-                    {item.label}
+                    style={{ width:"100%", textAlign:"left", padding:"8px 16px", border:"none", background:isActive ? C.accentSoft : "transparent", cursor:"pointer", color:isActive ? C.accent : C.textMid, fontSize:13, fontWeight:isActive ? 700 : 600, borderLeft:isActive ? `3px solid ${C.accent}` : "3px solid transparent", lineHeight:1.4, display:"flex", alignItems:"center", justifyContent:"space-between", gap:6 }}>
+                    <span>{item.label}</span>
+                    {item.badge && <span style={{ fontSize:9, fontWeight:800, color:C.teal, background:C.tealSoft, borderRadius:4, padding:"1px 5px", letterSpacing:0.5, flexShrink:0 }}>{item.badge}</span>}
                   </button>
                 );
               })}
